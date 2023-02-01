@@ -1,0 +1,774 @@
+nohup: 忽略输入
+2021-09-26 20:00:00.953959: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+2021-09-26 20:00:02.731581: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcuda.so.1
+2021-09-26 20:00:02.750108: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1716] Found device 0 with properties: 
+pciBusID: 0000:03:00.0 name: GeForce GTX 1080 Ti computeCapability: 6.1
+coreClock: 1.62GHz coreCount: 28 deviceMemorySize: 10.92GiB deviceMemoryBandwidth: 451.17GiB/s
+2021-09-26 20:00:02.750158: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+2021-09-26 20:00:02.752138: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcublas.so.10
+2021-09-26 20:00:02.753992: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcufft.so.10
+2021-09-26 20:00:02.754245: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcurand.so.10
+2021-09-26 20:00:02.756169: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcusolver.so.10
+2021-09-26 20:00:02.757154: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcusparse.so.10
+2021-09-26 20:00:02.761187: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudnn.so.7
+2021-09-26 20:00:02.763033: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1858] Adding visible gpu devices: 0
+2021-09-26 20:00:02.763559: I tensorflow/core/platform/cpu_feature_guard.cc:142] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN)to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2021-09-26 20:00:02.773520: I tensorflow/core/platform/profile_utils/cpu_utils.cc:104] CPU Frequency: 2099895000 Hz
+2021-09-26 20:00:02.775443: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x7f895fbbb9b0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2021-09-26 20:00:02.775469: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2021-09-26 20:00:02.924066: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x7f895fbbe6c0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2021-09-26 20:00:02.924115: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce GTX 1080 Ti, Compute Capability 6.1
+2021-09-26 20:00:02.927295: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1716] Found device 0 with properties: 
+pciBusID: 0000:03:00.0 name: GeForce GTX 1080 Ti computeCapability: 6.1
+coreClock: 1.62GHz coreCount: 28 deviceMemorySize: 10.92GiB deviceMemoryBandwidth: 451.17GiB/s
+2021-09-26 20:00:02.927372: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+2021-09-26 20:00:02.927426: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcublas.so.10
+2021-09-26 20:00:02.927463: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcufft.so.10
+2021-09-26 20:00:02.927498: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcurand.so.10
+2021-09-26 20:00:02.927533: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcusolver.so.10
+2021-09-26 20:00:02.927567: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcusparse.so.10
+2021-09-26 20:00:02.927602: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudnn.so.7
+2021-09-26 20:00:02.930682: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1858] Adding visible gpu devices: 0
+2021-09-26 20:00:02.930744: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+2021-09-26 20:00:03.387651: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1257] Device interconnect StreamExecutor with strength 1 edge matrix:
+2021-09-26 20:00:03.387710: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1263]      0 
+2021-09-26 20:00:03.387720: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1276] 0:   N 
+2021-09-26 20:00:03.389431: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1402] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10273 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:03:00.0, compute capability: 6.1)
+2021-09-26 20:01:11.347147: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcublas.so.10
+2021-09-26 20:01:11.641372: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudnn.so.7
+Loading settings from ./settings/settings.txt
+Settings: 
+
+settings 	 settings_file
+Initialise constants 	 _comment_0
+100 	 SEED
+20 	 SONG_LENGTH
+3 	 NUM_SONG_FEATURES
+20 	 NUM_META_FEATURES
+Initialise data paths 	 _comment_1
+../../data/skipgram/dataset_matrices/full_data_matrix.npy 	 FULL_DATA_PATH
+../../data/skipgram/dataset_matrices/train_data_matrix.npy 	 TRAIN_DATA_PATH
+../../data/skipgram/dataset_matrices/valid_data_matrix.npy 	 VALID_DATA_PATH
+../../data/skipgram/dataset_matrices/test_data_matrix.npy 	 TEST_DATA_PATH
+Initialise music attribute encoder paths 	 _comment_2
+../../data/skipgram/object_storage/y_p_encode.p 	 P_LE_PATH
+../../data/skipgram/object_storage/y_d_encode.p 	 D_LE_PATH
+../../data/skipgram/object_storage/y_r_encode.p 	 R_LE_PATH
+Initialise training parameters 	 _comment_3
+1000 	 TEMP_MAX
+512 	 BATCH_SIZE
+0.01 	 PRE_TRAIN_LR
+40 	 PRE_TRAIN_EPOCHS
+120 	 ADV_TRAIN_EPOCHS
+0.0001 	 ADV_TRAIN_G_LR
+0.0001 	 ADV_TRAIN_D_LR
+5.0 	 MAX_GRAD_NORM
+Initialise evaluation parameters 	 _comment_4
+[2, 3, 4, 5] 	 N_GRAMS
+5 	 EVAL_INTERVAL
+10 	 EVAL_RUNS
+Initialise generator parameters 	 _comment_5
+[32, 16, 8] 	 G_EMB_UNITS
+[0.1, 0.1, 0.1] 	 G_EMB_DROPOUT_RATE
+[64, 32, 16] 	 G_PROJ_UNITS
+[0.1, 0.1, 0.1] 	 G_PROJ_DROPOUT_RATE
+[1, 1, 1] 	 G_MEM_SLOTS
+[64, 32, 16] 	 G_HEAD_SIZE
+[2, 2, 2] 	 G_NUM_HEADS
+[2, 2, 2] 	 G_NUM_BLOCKS
+Initialise discriminator parameters 	 _comment_6
+[32, 16, 8] 	 D_EMB_UNITS
+[0.1, 0.1, 0.1] 	 D_EMB_DROPOUT_RATE
+64 	 D_PROJ_UNITS
+0.1 	 D_PROJ_DROPOUT_RATE
+1 	 D_MEM_SLOTS
+64 	 D_HEAD_SIZE
+2 	 D_NUM_HEADS
+2 	 D_NUM_BLOCKS
+Initialise checkpoint paths 	 _comment_7
+../../checkpoints/pre_train_c_hybrid_gan 	 PRE_TRAIN_CKPT_PATH
+../../checkpoints/adv_train_c_hybrid_gan 	 ADV_TRAIN_CKPT_PATH
+Initialise logging paths 	 _comment_8
+../../logs 	 LOG_DIR
+../../logs/train 	 TRAIN_LOG_DIR
+../../logs/valid 	 VALID_LOG_DIR
+../../logs/test 	 TEST_LOG_DIR
+../../results/c_hybrid_gan/logs/test_logs.csv 	 TEST_LOGS_FILENAME
+../../results/c_hybrid_gan/logs/test_result_logs.csv 	 TEST_RESULT_LOGS_FILENAME
+1 	 REUSE_TEST_LOGS
+0 	 REUSE_TEST_RESULT_LOGS
+Initialise encoder model paths 	 _comment_9
+../../data/skipgram/models/syllEncoding_20190419.bin 	 SYLL_MODEL_PATH
+../../data/skipgram/models/wordLevelEncoder_20190419.bin 	 WORD_MODEL_PATH
+================================================================ 
+ 
+Data: 
+
+Shape of full data::  (13937, 460)
+Shape of melody data: (13937, 20, 3)
+Shape of pitch data: (13937, 20)
+Shape of duration data: (13937, 20)
+Shape of rest data: (13937, 20)
+Number of unique pitches, durations and rests present in data:
+101
+19
+8
+Steps per epoch train:  22.0
+================================================================ 
+ 
+
+ ***** Starting PreTraining ***** 
+
+Epoch 1 Pitch Loss: Train: 3.6907 Validation: 3.4442
+Epoch 1 Duration Loss: Train: 1.9746 Validation: 1.8655
+Epoch 1 Rest Loss: Train: 1.0032 Validation: 0.9231
+Saving pretrain checkpoint for epoch 1 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-1
+Time taken for 1 epoch: 210.8073263168335 secs
+
+Saving pretrain checkpoint for epoch 2 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-2
+Time taken for 1 epoch: 3.7626845836639404 secs
+
+Saving pretrain checkpoint for epoch 3 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-3
+Time taken for 1 epoch: 3.7456040382385254 secs
+
+Saving pretrain checkpoint for epoch 4 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-4
+Time taken for 1 epoch: 3.6945576667785645 secs
+
+Saving pretrain checkpoint for epoch 5 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-5
+Time taken for 1 epoch: 3.7552292346954346 secs
+
+Epoch 6 Pitch Loss: Train: 2.2619 Validation: 2.2588
+Epoch 6 Duration Loss: Train: 1.6550 Validation: 1.6538
+Epoch 6 Rest Loss: Train: 0.8530 Validation: 0.8525
+Saving pretrain checkpoint for epoch 6 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-6
+Time taken for 1 epoch: 64.71695303916931 secs
+
+Saving pretrain checkpoint for epoch 7 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-7
+Time taken for 1 epoch: 3.575147867202759 secs
+
+Saving pretrain checkpoint for epoch 8 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-8
+Time taken for 1 epoch: 3.475918769836426 secs
+
+Saving pretrain checkpoint for epoch 9 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-9
+Time taken for 1 epoch: 3.7286248207092285 secs
+
+Saving pretrain checkpoint for epoch 10 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-10
+Time taken for 1 epoch: 3.6124255657196045 secs
+
+Epoch 11 Pitch Loss: Train: 2.1390 Validation: 2.1524
+Epoch 11 Duration Loss: Train: 1.6254 Validation: 1.6230
+Epoch 11 Rest Loss: Train: 0.8284 Validation: 0.8332
+Saving pretrain checkpoint for epoch 11 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-11
+Time taken for 1 epoch: 66.61256861686707 secs
+
+Saving pretrain checkpoint for epoch 12 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-12
+Time taken for 1 epoch: 3.556333303451538 secs
+
+Saving pretrain checkpoint for epoch 13 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-13
+Time taken for 1 epoch: 3.4014809131622314 secs
+
+Saving pretrain checkpoint for epoch 14 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-14
+Time taken for 1 epoch: 3.3727874755859375 secs
+
+Saving pretrain checkpoint for epoch 15 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-15
+Time taken for 1 epoch: 3.5412275791168213 secs
+
+Epoch 16 Pitch Loss: Train: 2.0758 Validation: 2.1055
+Epoch 16 Duration Loss: Train: 1.6126 Validation: 1.6139
+Epoch 16 Rest Loss: Train: 0.8173 Validation: 0.8190
+Saving pretrain checkpoint for epoch 16 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-16
+Time taken for 1 epoch: 66.76828742027283 secs
+
+Saving pretrain checkpoint for epoch 17 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-17
+Time taken for 1 epoch: 3.4499268531799316 secs
+
+Saving pretrain checkpoint for epoch 18 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-18
+Time taken for 1 epoch: 3.505889892578125 secs
+
+Saving pretrain checkpoint for epoch 19 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-19
+Time taken for 1 epoch: 3.419616222381592 secs
+
+Saving pretrain checkpoint for epoch 20 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-20
+Time taken for 1 epoch: 3.5930442810058594 secs
+
+Epoch 21 Pitch Loss: Train: 2.0398 Validation: 2.0820
+Epoch 21 Duration Loss: Train: 1.6046 Validation: 1.6096
+Epoch 21 Rest Loss: Train: 0.8103 Validation: 0.8102
+Saving pretrain checkpoint for epoch 21 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-21
+Time taken for 1 epoch: 64.68519473075867 secs
+
+Saving pretrain checkpoint for epoch 22 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-22
+Time taken for 1 epoch: 3.435468912124634 secs
+
+Saving pretrain checkpoint for epoch 23 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-23
+Time taken for 1 epoch: 3.502009391784668 secs
+
+Saving pretrain checkpoint for epoch 24 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-24
+Time taken for 1 epoch: 3.5686800479888916 secs
+
+Saving pretrain checkpoint for epoch 25 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-25
+Time taken for 1 epoch: 3.508659839630127 secs
+
+Epoch 26 Pitch Loss: Train: 2.0158 Validation: 2.0728
+Epoch 26 Duration Loss: Train: 1.5941 Validation: 1.6019
+Epoch 26 Rest Loss: Train: 0.8047 Validation: 0.8075
+Saving pretrain checkpoint for epoch 26 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-26
+Time taken for 1 epoch: 68.57360577583313 secs
+
+Saving pretrain checkpoint for epoch 27 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-27
+Time taken for 1 epoch: 3.421753168106079 secs
+
+Saving pretrain checkpoint for epoch 28 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-28
+Time taken for 1 epoch: 3.523540496826172 secs
+
+Saving pretrain checkpoint for epoch 29 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-29
+Time taken for 1 epoch: 3.6343963146209717 secs
+
+Saving pretrain checkpoint for epoch 30 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-30
+Time taken for 1 epoch: 3.5824551582336426 secs
+
+Epoch 31 Pitch Loss: Train: 1.9902 Validation: 2.0715
+Epoch 31 Duration Loss: Train: 1.5881 Validation: 1.6005
+Epoch 31 Rest Loss: Train: 0.8015 Validation: 0.8053
+Saving pretrain checkpoint for epoch 31 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-31
+Time taken for 1 epoch: 66.62225365638733 secs
+
+Saving pretrain checkpoint for epoch 32 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-32
+Time taken for 1 epoch: 3.509474754333496 secs
+
+Saving pretrain checkpoint for epoch 33 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-33
+Time taken for 1 epoch: 3.5742368698120117 secs
+
+Saving pretrain checkpoint for epoch 34 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-34
+Time taken for 1 epoch: 3.4816980361938477 secs
+
+Saving pretrain checkpoint for epoch 35 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-35
+Time taken for 1 epoch: 3.63126802444458 secs
+
+Epoch 36 Pitch Loss: Train: 1.9658 Validation: 2.0749
+Epoch 36 Duration Loss: Train: 1.5806 Validation: 1.6036
+Epoch 36 Rest Loss: Train: 0.7982 Validation: 0.8029
+Saving pretrain checkpoint for epoch 36 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-36
+Time taken for 1 epoch: 68.21016454696655 secs
+
+Saving pretrain checkpoint for epoch 37 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-37
+Time taken for 1 epoch: 3.3073713779449463 secs
+
+Saving pretrain checkpoint for epoch 38 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-38
+Time taken for 1 epoch: 3.4730849266052246 secs
+
+Saving pretrain checkpoint for epoch 39 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-39
+Time taken for 1 epoch: 3.4282495975494385 secs
+
+Saving pretrain checkpoint for epoch 40 at ../../checkpoints/pre_train_c_hybrid_gan/ckpt-40
+Time taken for 1 epoch: 3.5464015007019043 secs
+
+
+ ***** Starting Adversarial Training ***** 
+
+Epoch 1 Train loss: G:1.0203, D:0.5561, Valid loss: G:1.4252, D:0.4008
+Saving checkpoint for epoch 1 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-1
+Temperature used for epoch 1 : 1.0564857721328735
+Time taken for 1 epoch 377.6051940917969 sec
+
+Saving checkpoint for epoch 2 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-2
+Temperature used for epoch 2 : 1.119086503982544
+Time taken for 1 epoch 5.902126789093018 sec
+
+Saving checkpoint for epoch 3 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-3
+Temperature used for epoch 3 : 1.185396432876587
+Time taken for 1 epoch 5.972056150436401 sec
+
+Saving checkpoint for epoch 4 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-4
+Temperature used for epoch 4 : 1.2556356191635132
+Time taken for 1 epoch 6.135801553726196 sec
+
+Saving checkpoint for epoch 5 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-5
+Temperature used for epoch 5 : 1.3300367593765259
+Time taken for 1 epoch 5.980452537536621 sec
+
+Epoch 6 Train loss: G:4.7623, D:0.1080, Valid loss: G:4.4012, D:0.1055
+Saving checkpoint for epoch 6 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-6
+Temperature used for epoch 6 : 1.408846378326416
+Time taken for 1 epoch 62.712456464767456 sec
+
+Saving checkpoint for epoch 7 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-7
+Temperature used for epoch 7 : 1.492325782775879
+Time taken for 1 epoch 6.03689432144165 sec
+
+Saving checkpoint for epoch 8 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-8
+Temperature used for epoch 8 : 1.580751657485962
+Time taken for 1 epoch 6.07866358757019 sec
+
+Saving checkpoint for epoch 9 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-9
+Temperature used for epoch 9 : 1.6744170188903809
+Time taken for 1 epoch 6.068387269973755 sec
+
+Saving checkpoint for epoch 10 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-10
+Temperature used for epoch 10 : 1.773632526397705
+Time taken for 1 epoch 6.2111687660217285 sec
+
+Epoch 11 Train loss: G:5.9480, D:0.0768, Valid loss: G:5.4937, D:0.0762
+Saving checkpoint for epoch 11 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-11
+Temperature used for epoch 11 : 1.878726840019226
+Time taken for 1 epoch 61.62285780906677 sec
+
+Saving checkpoint for epoch 12 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-12
+Temperature used for epoch 12 : 1.9900484085083008
+Time taken for 1 epoch 6.342897653579712 sec
+
+Saving checkpoint for epoch 13 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-13
+Temperature used for epoch 13 : 2.107966184616089
+Time taken for 1 epoch 6.048139810562134 sec
+
+Saving checkpoint for epoch 14 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-14
+Temperature used for epoch 14 : 2.2328710556030273
+Time taken for 1 epoch 6.119053363800049 sec
+
+Saving checkpoint for epoch 15 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-15
+Temperature used for epoch 15 : 2.3651769161224365
+Time taken for 1 epoch 5.804459571838379 sec
+
+Epoch 16 Train loss: G:5.7513, D:0.0861, Valid loss: G:5.6766, D:0.0716
+Saving checkpoint for epoch 16 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-16
+Temperature used for epoch 16 : 2.5053224563598633
+Time taken for 1 epoch 62.88206911087036 sec
+
+Saving checkpoint for epoch 17 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-17
+Temperature used for epoch 17 : 2.6537721157073975
+Time taken for 1 epoch 5.955921173095703 sec
+
+Saving checkpoint for epoch 18 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-18
+Temperature used for epoch 18 : 2.8110179901123047
+Time taken for 1 epoch 6.117026090621948 sec
+
+Saving checkpoint for epoch 19 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-19
+Temperature used for epoch 19 : 2.977581262588501
+Time taken for 1 epoch 6.080498695373535 sec
+
+Saving checkpoint for epoch 20 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-20
+Temperature used for epoch 20 : 3.1540141105651855
+Time taken for 1 epoch 5.981760263442993 sec
+
+Epoch 21 Train loss: G:5.3724, D:0.1079, Valid loss: G:5.4511, D:0.0695
+Saving checkpoint for epoch 21 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-21
+Temperature used for epoch 21 : 3.3409011363983154
+Time taken for 1 epoch 63.434922218322754 sec
+
+Saving checkpoint for epoch 22 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-22
+Temperature used for epoch 22 : 3.5388619899749756
+Time taken for 1 epoch 5.888433218002319 sec
+
+Saving checkpoint for epoch 23 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-23
+Temperature used for epoch 23 : 3.7485527992248535
+Time taken for 1 epoch 6.454942226409912 sec
+
+Saving checkpoint for epoch 24 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-24
+Temperature used for epoch 24 : 3.9706685543060303
+Time taken for 1 epoch 6.060659170150757 sec
+
+Saving checkpoint for epoch 25 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-25
+Temperature used for epoch 25 : 4.2059454917907715
+Time taken for 1 epoch 5.966560125350952 sec
+
+Epoch 26 Train loss: G:4.8555, D:0.1270, Valid loss: G:5.1684, D:0.0879
+Saving checkpoint for epoch 26 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-26
+Temperature used for epoch 26 : 4.455163478851318
+Time taken for 1 epoch 64.40534377098083 sec
+
+Saving checkpoint for epoch 27 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-27
+Temperature used for epoch 27 : 4.719148635864258
+Time taken for 1 epoch 6.580356597900391 sec
+
+Saving checkpoint for epoch 28 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-28
+Temperature used for epoch 28 : 4.998775482177734
+Time taken for 1 epoch 6.607740163803101 sec
+
+Saving checkpoint for epoch 29 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-29
+Temperature used for epoch 29 : 5.294971466064453
+Time taken for 1 epoch 5.988999366760254 sec
+
+Saving checkpoint for epoch 30 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-30
+Temperature used for epoch 30 : 5.608718395233154
+Time taken for 1 epoch 5.884871006011963 sec
+
+Epoch 31 Train loss: G:4.3876, D:0.1597, Valid loss: G:4.3410, D:0.1200
+Saving checkpoint for epoch 31 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-31
+Temperature used for epoch 31 : 5.941055774688721
+Time taken for 1 epoch 64.13439011573792 sec
+
+Saving checkpoint for epoch 32 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-32
+Temperature used for epoch 32 : 6.29308557510376
+Time taken for 1 epoch 5.8966522216796875 sec
+
+Saving checkpoint for epoch 33 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-33
+Temperature used for epoch 33 : 6.665974140167236
+Time taken for 1 epoch 5.915838241577148 sec
+
+Saving checkpoint for epoch 34 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-34
+Temperature used for epoch 34 : 7.060957908630371
+Time taken for 1 epoch 5.92609977722168 sec
+
+Saving checkpoint for epoch 35 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-35
+Temperature used for epoch 35 : 7.47934627532959
+Time taken for 1 epoch 5.978896856307983 sec
+
+Epoch 36 Train loss: G:3.8959, D:0.1899, Valid loss: G:3.8156, D:0.1626
+Saving checkpoint for epoch 36 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-36
+Temperature used for epoch 36 : 7.922525405883789
+Time taken for 1 epoch 68.52862238883972 sec
+
+Saving checkpoint for epoch 37 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-37
+Temperature used for epoch 37 : 8.39196491241455
+Time taken for 1 epoch 5.985575437545776 sec
+
+Saving checkpoint for epoch 38 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-38
+Temperature used for epoch 38 : 8.889219284057617
+Time taken for 1 epoch 5.8847596645355225 sec
+
+Saving checkpoint for epoch 39 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-39
+Temperature used for epoch 39 : 9.415939331054688
+Time taken for 1 epoch 5.775565147399902 sec
+
+Saving checkpoint for epoch 40 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-40
+Temperature used for epoch 40 : 9.973868370056152
+Time taken for 1 epoch 5.9090576171875 sec
+
+Epoch 41 Train loss: G:3.4722, D:0.2327, Valid loss: G:3.4515, D:0.1914
+Saving checkpoint for epoch 41 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-41
+Temperature used for epoch 41 : 10.564857482910156
+Time taken for 1 epoch 66.39951419830322 sec
+
+Saving checkpoint for epoch 42 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-42
+Temperature used for epoch 42 : 11.190864562988281
+Time taken for 1 epoch 6.571522951126099 sec
+
+Saving checkpoint for epoch 43 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-43
+Temperature used for epoch 43 : 11.853964805603027
+Time taken for 1 epoch 6.473727226257324 sec
+
+Saving checkpoint for epoch 44 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-44
+Temperature used for epoch 44 : 12.556356430053711
+Time taken for 1 epoch 5.894316673278809 sec
+
+Saving checkpoint for epoch 45 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-45
+Temperature used for epoch 45 : 13.30036735534668
+Time taken for 1 epoch 6.285427808761597 sec
+
+Epoch 46 Train loss: G:3.2254, D:0.2496, Valid loss: G:3.1990, D:0.2063
+Saving checkpoint for epoch 46 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-46
+Temperature used for epoch 46 : 14.08846378326416
+Time taken for 1 epoch 66.9433081150055 sec
+
+Saving checkpoint for epoch 47 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-47
+Temperature used for epoch 47 : 14.923257827758789
+Time taken for 1 epoch 6.03985333442688 sec
+
+Saving checkpoint for epoch 48 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-48
+Temperature used for epoch 48 : 15.807516098022461
+Time taken for 1 epoch 6.379945278167725 sec
+
+Saving checkpoint for epoch 49 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-49
+Temperature used for epoch 49 : 16.744171142578125
+Time taken for 1 epoch 5.8927037715911865 sec
+
+Saving checkpoint for epoch 50 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-50
+Temperature used for epoch 50 : 17.736324310302734
+Time taken for 1 epoch 6.232471942901611 sec
+
+Epoch 51 Train loss: G:2.8809, D:0.2824, Valid loss: G:2.9867, D:0.3040
+Saving checkpoint for epoch 51 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-51
+Temperature used for epoch 51 : 18.787267684936523
+Time taken for 1 epoch 65.92667126655579 sec
+
+Saving checkpoint for epoch 52 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-52
+Temperature used for epoch 52 : 19.900484085083008
+Time taken for 1 epoch 6.026578903198242 sec
+
+Saving checkpoint for epoch 53 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-53
+Temperature used for epoch 53 : 21.079662322998047
+Time taken for 1 epoch 6.3974034786224365 sec
+
+Saving checkpoint for epoch 54 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-54
+Temperature used for epoch 54 : 22.328710556030273
+Time taken for 1 epoch 5.800898551940918 sec
+
+Saving checkpoint for epoch 55 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-55
+Temperature used for epoch 55 : 23.651769638061523
+Time taken for 1 epoch 5.993381500244141 sec
+
+Epoch 56 Train loss: G:2.7737, D:0.2989, Valid loss: G:3.1029, D:0.2588
+Saving checkpoint for epoch 56 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-56
+Temperature used for epoch 56 : 25.053224563598633
+Time taken for 1 epoch 65.71420788764954 sec
+
+Saving checkpoint for epoch 57 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-57
+Temperature used for epoch 57 : 26.537721633911133
+Time taken for 1 epoch 6.110048055648804 sec
+
+Saving checkpoint for epoch 58 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-58
+Temperature used for epoch 58 : 28.110179901123047
+Time taken for 1 epoch 6.358289480209351 sec
+
+Saving checkpoint for epoch 59 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-59
+Temperature used for epoch 59 : 29.775814056396484
+Time taken for 1 epoch 5.989960670471191 sec
+
+Saving checkpoint for epoch 60 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-60
+Temperature used for epoch 60 : 31.540142059326172
+Time taken for 1 epoch 6.51615047454834 sec
+
+Epoch 61 Train loss: G:2.5390, D:0.3273, Valid loss: G:2.7974, D:0.3267
+Saving checkpoint for epoch 61 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-61
+Temperature used for epoch 61 : 33.40901184082031
+Time taken for 1 epoch 66.79524803161621 sec
+
+Saving checkpoint for epoch 62 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-62
+Temperature used for epoch 62 : 35.38862228393555
+Time taken for 1 epoch 5.912917137145996 sec
+
+Saving checkpoint for epoch 63 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-63
+Temperature used for epoch 63 : 37.48552703857422
+Time taken for 1 epoch 5.939142942428589 sec
+
+Saving checkpoint for epoch 64 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-64
+Temperature used for epoch 64 : 39.70668411254883
+Time taken for 1 epoch 6.082703590393066 sec
+
+Saving checkpoint for epoch 65 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-65
+Temperature used for epoch 65 : 42.05945587158203
+Time taken for 1 epoch 6.563462495803833 sec
+
+Epoch 66 Train loss: G:2.5354, D:0.3252, Valid loss: G:2.6594, D:0.3391
+Saving checkpoint for epoch 66 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-66
+Temperature used for epoch 66 : 44.5516357421875
+Time taken for 1 epoch 66.30726361274719 sec
+
+Saving checkpoint for epoch 67 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-67
+Temperature used for epoch 67 : 47.19148254394531
+Time taken for 1 epoch 6.485250949859619 sec
+
+Saving checkpoint for epoch 68 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-68
+Temperature used for epoch 68 : 49.987754821777344
+Time taken for 1 epoch 6.4490861892700195 sec
+
+Saving checkpoint for epoch 69 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-69
+Temperature used for epoch 69 : 52.94971466064453
+Time taken for 1 epoch 6.01874566078186 sec
+
+Saving checkpoint for epoch 70 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-70
+Temperature used for epoch 70 : 56.08718490600586
+Time taken for 1 epoch 6.222303867340088 sec
+
+Epoch 71 Train loss: G:2.4390, D:0.3438, Valid loss: G:2.4770, D:0.3767
+Saving checkpoint for epoch 71 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-71
+Temperature used for epoch 71 : 59.41055679321289
+Time taken for 1 epoch 68.73214435577393 sec
+
+Saving checkpoint for epoch 72 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-72
+Temperature used for epoch 72 : 62.93085479736328
+Time taken for 1 epoch 5.945230484008789 sec
+
+Saving checkpoint for epoch 73 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-73
+Temperature used for epoch 73 : 66.65974426269531
+Time taken for 1 epoch 6.009226083755493 sec
+
+Saving checkpoint for epoch 74 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-74
+Temperature used for epoch 74 : 70.60958099365234
+Time taken for 1 epoch 6.452302694320679 sec
+
+Saving checkpoint for epoch 75 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-75
+Temperature used for epoch 75 : 74.79346466064453
+Time taken for 1 epoch 6.010283708572388 sec
+
+Epoch 76 Train loss: G:2.2756, D:0.3641, Valid loss: G:2.3880, D:0.3841
+Saving checkpoint for epoch 76 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-76
+Temperature used for epoch 76 : 79.22525024414062
+Time taken for 1 epoch 66.5200822353363 sec
+
+Saving checkpoint for epoch 77 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-77
+Temperature used for epoch 77 : 83.91964721679688
+Time taken for 1 epoch 6.371536016464233 sec
+
+Saving checkpoint for epoch 78 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-78
+Temperature used for epoch 78 : 88.89219665527344
+Time taken for 1 epoch 6.483195543289185 sec
+
+Saving checkpoint for epoch 79 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-79
+Temperature used for epoch 79 : 94.15939331054688
+Time taken for 1 epoch 6.306668519973755 sec
+
+Saving checkpoint for epoch 80 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-80
+Temperature used for epoch 80 : 99.73868560791016
+Time taken for 1 epoch 6.1298582553863525 sec
+
+Epoch 81 Train loss: G:2.2642, D:0.3683, Valid loss: G:2.2570, D:0.4099
+Saving checkpoint for epoch 81 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-81
+Temperature used for epoch 81 : 105.64857482910156
+Time taken for 1 epoch 66.45015525817871 sec
+
+Saving checkpoint for epoch 82 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-82
+Temperature used for epoch 82 : 111.90864562988281
+Time taken for 1 epoch 6.198931694030762 sec
+
+Saving checkpoint for epoch 83 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-83
+Temperature used for epoch 83 : 118.5396499633789
+Time taken for 1 epoch 6.73488712310791 sec
+
+Saving checkpoint for epoch 84 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-84
+Temperature used for epoch 84 : 125.56356811523438
+Time taken for 1 epoch 6.11348819732666 sec
+
+Saving checkpoint for epoch 85 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-85
+Temperature used for epoch 85 : 133.00367736816406
+Time taken for 1 epoch 6.382771253585815 sec
+
+Epoch 86 Train loss: G:2.3462, D:0.3531, Valid loss: G:2.5849, D:0.3896
+Saving checkpoint for epoch 86 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-86
+Temperature used for epoch 86 : 140.8846435546875
+Time taken for 1 epoch 66.76419711112976 sec
+
+Saving checkpoint for epoch 87 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-87
+Temperature used for epoch 87 : 149.23257446289062
+Time taken for 1 epoch 6.077058792114258 sec
+
+Saving checkpoint for epoch 88 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-88
+Temperature used for epoch 88 : 158.07516479492188
+Time taken for 1 epoch 6.382940292358398 sec
+
+Saving checkpoint for epoch 89 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-89
+Temperature used for epoch 89 : 167.44171142578125
+Time taken for 1 epoch 6.292388200759888 sec
+
+Saving checkpoint for epoch 90 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-90
+Temperature used for epoch 90 : 177.36325073242188
+Time taken for 1 epoch 6.765233278274536 sec
+
+Epoch 91 Train loss: G:2.3786, D:0.3531, Valid loss: G:2.2888, D:0.3917
+Saving checkpoint for epoch 91 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-91
+Temperature used for epoch 91 : 187.8726806640625
+Time taken for 1 epoch 67.76693201065063 sec
+
+Saving checkpoint for epoch 92 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-92
+Temperature used for epoch 92 : 199.0048370361328
+Time taken for 1 epoch 6.074221611022949 sec
+
+Saving checkpoint for epoch 93 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-93
+Temperature used for epoch 93 : 210.79661560058594
+Time taken for 1 epoch 6.681163549423218 sec
+
+Saving checkpoint for epoch 94 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-94
+Temperature used for epoch 94 : 223.28709411621094
+Time taken for 1 epoch 6.409548759460449 sec
+
+Saving checkpoint for epoch 95 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-95
+Temperature used for epoch 95 : 236.5177001953125
+Time taken for 1 epoch 6.428727865219116 sec
+
+Epoch 96 Train loss: G:2.3499, D:0.3559, Valid loss: G:2.4515, D:0.4148
+Saving checkpoint for epoch 96 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-96
+Temperature used for epoch 96 : 250.53224182128906
+Time taken for 1 epoch 65.80262923240662 sec
+
+Saving checkpoint for epoch 97 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-97
+Temperature used for epoch 97 : 265.3772277832031
+Time taken for 1 epoch 6.497614860534668 sec
+
+Saving checkpoint for epoch 98 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-98
+Temperature used for epoch 98 : 281.101806640625
+Time taken for 1 epoch 6.32229471206665 sec
+
+Saving checkpoint for epoch 99 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-99
+Temperature used for epoch 99 : 297.7581481933594
+Time taken for 1 epoch 6.017936706542969 sec
+
+Saving checkpoint for epoch 100 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-100
+Temperature used for epoch 100 : 315.40142822265625
+Time taken for 1 epoch 6.0817811489105225 sec
+
+Epoch 101 Train loss: G:2.4610, D:0.3375, Valid loss: G:2.8024, D:0.3898
+Saving checkpoint for epoch 101 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-101
+Temperature used for epoch 101 : 334.0901184082031
+Time taken for 1 epoch 68.90840792655945 sec
+
+Saving checkpoint for epoch 102 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-102
+Temperature used for epoch 102 : 353.8861999511719
+Time taken for 1 epoch 6.250755310058594 sec
+
+Saving checkpoint for epoch 103 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-103
+Temperature used for epoch 103 : 374.85528564453125
+Time taken for 1 epoch 6.319635391235352 sec
+
+Saving checkpoint for epoch 104 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-104
+Temperature used for epoch 104 : 397.0668640136719
+Time taken for 1 epoch 6.193593978881836 sec
+
+Saving checkpoint for epoch 105 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-105
+Temperature used for epoch 105 : 420.59454345703125
+Time taken for 1 epoch 6.202394962310791 sec
+
+Epoch 106 Train loss: G:2.4545, D:0.3405, Valid loss: G:2.4863, D:0.3887
+Saving checkpoint for epoch 106 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-106
+Temperature used for epoch 106 : 445.5163269042969
+Time taken for 1 epoch 66.03816652297974 sec
+
+Saving checkpoint for epoch 107 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-107
+Temperature used for epoch 107 : 471.91485595703125
+Time taken for 1 epoch 6.268206834793091 sec
+
+Saving checkpoint for epoch 108 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-108
+Temperature used for epoch 108 : 499.8775634765625
+Time taken for 1 epoch 6.3023457527160645 sec
+
+Saving checkpoint for epoch 109 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-109
+Temperature used for epoch 109 : 529.4971313476562
+Time taken for 1 epoch 6.059403657913208 sec
+
+Saving checkpoint for epoch 110 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-110
+Temperature used for epoch 110 : 560.871826171875
+Time taken for 1 epoch 6.244221448898315 sec
+
+Epoch 111 Train loss: G:2.5950, D:0.3261, Valid loss: G:2.7322, D:0.3958
+Saving checkpoint for epoch 111 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-111
+Temperature used for epoch 111 : 594.1055908203125
+Time taken for 1 epoch 66.22663259506226 sec
+
+Saving checkpoint for epoch 112 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-112
+Temperature used for epoch 112 : 629.3085327148438
+Time taken for 1 epoch 6.268090009689331 sec
+
+Saving checkpoint for epoch 113 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-113
+Temperature used for epoch 113 : 666.597412109375
+Time taken for 1 epoch 6.589012622833252 sec
+
+Saving checkpoint for epoch 114 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-114
+Temperature used for epoch 114 : 706.0958251953125
+Time taken for 1 epoch 6.217606782913208 sec
+
+Saving checkpoint for epoch 115 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-115
+Temperature used for epoch 115 : 747.9346313476562
+Time taken for 1 epoch 6.263378858566284 sec
+
+Epoch 116 Train loss: G:2.7240, D:0.3101, Valid loss: G:2.8578, D:0.3569
+Saving checkpoint for epoch 116 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-116
+Temperature used for epoch 116 : 792.2525024414062
+Time taken for 1 epoch 66.27122497558594 sec
+
+Saving checkpoint for epoch 117 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-117
+Temperature used for epoch 117 : 839.1964721679688
+Time taken for 1 epoch 6.283904314041138 sec
+
+Saving checkpoint for epoch 118 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-118
+Temperature used for epoch 118 : 888.9219360351562
+Time taken for 1 epoch 6.593670129776001 sec
+
+Saving checkpoint for epoch 119 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-119
+Temperature used for epoch 119 : 941.5938720703125
+Time taken for 1 epoch 6.132656812667847 sec
+
+Saving checkpoint for epoch 120 at ../../checkpoints/adv_train_c_hybrid_gan/ckpt-120
+Temperature used for epoch 120 : 997.3868408203125
+Time taken for 1 epoch 6.44917893409729 sec
+
+Training is complete.
