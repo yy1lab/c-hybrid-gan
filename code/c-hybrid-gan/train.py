@@ -132,7 +132,8 @@ def main():
                                          STEPS_PER_EPOCH_TRAIN,
                                          ADV_TRAIN_EPOCHS,
                                          MAX_GRAD_NORM,
-                                         NUM_TOKENS)
+                                         NUM_TOKENS,
+                                         seed_len=SEED_LENGTH)
 
     ## Setup Checkpoint
 

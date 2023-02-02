@@ -134,7 +134,7 @@ class PreTrainDriver():
 class AdversarialDriver():
 
     def __init__(self, g_model, d_model, g_opt, d_opt, temp_max, steps_per_epoch, 
-               adv_train_epochs, max_grad_norm, num_tokens):
+               adv_train_epochs, max_grad_norm, num_tokens, seed_len=10):
         """
         :param temp_max: maximum temperature a.k.a beta_max
         :param n_adv_steps : total number of adversarial steps
@@ -153,6 +153,7 @@ class AdversarialDriver():
 
         self.max_grad_norm = max_grad_norm
         self.num_tokens = num_tokens
+        self.seed_len = seed_len
 
     def add_gumbel(self, o, eps=1e-10):
         """Sample from Gumbel(0, 1)"""
@@ -161,7 +162,7 @@ class AdversarialDriver():
         gumbel = tf.add(o, g)
         return gumbel
 
-    def _seed_g_recurrence(self, inp, seed_len=10, training=False):
+    def _seed_g_recurrence(self, inp, training=False):
         """Generator forward pass.
         """
         batch_m, (batch_p, batch_d, batch_r) = inp
@@ -206,7 +207,7 @@ class AdversarialDriver():
             batch_d_out_oha_t = tf.nn.softmax(tf.multiply(batch_d_gumbel_t, self.temp))  # [None, NUM_D_TOKENS]
             batch_r_out_oha_t = tf.nn.softmax(tf.multiply(batch_r_gumbel_t, self.temp))  # [None, NUM_R_TOKENS]
 
-            if t >= seed_len:
+            if t >= self.seed_len:
                 # No teacher forcing so avoid so-called exposure bias
                 batch_p_t = batch_p_out_oha_t
                 batch_d_t = batch_d_out_oha_t
@@ -365,8 +366,7 @@ class AdversarialDriver():
         return g_loss, d_loss
 
     def _step(self, inp, training=False):
-        batch_m, _ = inp
-        g_out, g_out_oha = self._g_recurrence(batch_m, training=training) 
+        g_out, g_out_oha = self._seed_g_recurrence(inp, training=training)
         g_loss, d_loss   = self._compute_loss(inp, g_out_oha, training=training)
 
         return g_loss, d_loss, g_out
@@ -398,12 +398,12 @@ class AdversarialDriver():
         g_out, _ = self._g_recurrence(batch_m, training=False)
         return g_out
 
-    # @tf.function
-    def seed_generate(self, inp, seed_len=10):
+    @tf.function
+    def seed_generate(self, inp):
         """
         Perform generator forward pass.
         """
-        g_out, _ = self._seed_g_recurrence(inp, seed_len, training=False)
+        g_out, _ = self._seed_g_recurrence(inp, training=False)
         return g_out
 
     @tf.function
