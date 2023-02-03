@@ -42,6 +42,8 @@ def main():
                                                    NUM_META_FEATURES,
                                                    convert_to_tensor=True)
 
+    inp = x_test, y_test
+
     TRAIN_LEN = len(x_train)
     TEST_LEN  = len(x_test)
 
@@ -95,7 +97,8 @@ def main():
                                          STEPS_PER_EPOCH_TRAIN,
                                          ADV_TRAIN_EPOCHS,
                                          MAX_GRAD_NORM, 
-                                         NUM_TOKENS)
+                                         NUM_TOKENS,
+                                         seed_len=SEED_LENGTH)
 
     ## Setup Checkpoint
 
@@ -177,7 +180,7 @@ def main():
                 'method' : 'C-Hybrid-MLE'}
 
         # generate test song attr.
-        test_g_out = adv_train_driver.generate(x_test)
+        test_g_out = adv_train_driver.seed_generate(inp)
 
         # infer attributes of generated songs
         y_test_gen_attr = infer(test_g_out, LE_PATHS, is_tune=True)
@@ -264,8 +267,9 @@ def main():
                 'run_id' : run_id,
                 'method' : 'C-Hybrid-GAN'}
 
+
         # generate test song attr.
-        test_g_out = adv_train_driver.generate(x_test)
+        test_g_out = adv_train_driver.seed_generate(inp)
 
         # infer attributes of generated songs
         y_test_gen_attr = infer(test_g_out, LE_PATHS, is_tune=True)
