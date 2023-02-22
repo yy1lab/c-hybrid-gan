@@ -166,7 +166,6 @@ class AdversarialDriver():
         """Generator forward pass.
         """
         batch_m, (batch_p, batch_d, batch_r) = inp
-
         batch_p_out = []
         batch_d_out = []
         batch_r_out = []
@@ -195,19 +194,20 @@ class AdversarialDriver():
             (batch_p_logits_t, batch_d_logits_t, batch_r_logits_t), g_memory = self.g_model(
                 (batch_m_t, batch_n_t), g_memory, training=training)
 
-            batch_p_gumbel_t = self.add_gumbel(batch_p_logits_t)  # [None, NUM_P_TOKENS]
-            batch_d_gumbel_t = self.add_gumbel(batch_d_logits_t)  # [None, NUM_D_TOKENS]
-            batch_r_gumbel_t = self.add_gumbel(batch_r_logits_t)  # [None, NUM_R_TOKENS]
-
-            batch_p_out_t = tf.stop_gradient(tf.argmax(batch_p_gumbel_t, axis=-1))  # [None]
-            batch_d_out_t = tf.stop_gradient(tf.argmax(batch_d_gumbel_t, axis=-1))  # [None]
-            batch_r_out_t = tf.stop_gradient(tf.argmax(batch_r_gumbel_t, axis=-1))  # [None]
-
-            batch_p_out_oha_t = tf.nn.softmax(tf.multiply(batch_p_gumbel_t, self.temp))  # [None, NUM_P_TOKENS]
-            batch_d_out_oha_t = tf.nn.softmax(tf.multiply(batch_d_gumbel_t, self.temp))  # [None, NUM_D_TOKENS]
-            batch_r_out_oha_t = tf.nn.softmax(tf.multiply(batch_r_gumbel_t, self.temp))  # [None, NUM_R_TOKENS]
 
             if t >= self.seed_len:
+                batch_p_gumbel_t = self.add_gumbel(batch_p_logits_t)  # [None, NUM_P_TOKENS]
+                batch_d_gumbel_t = self.add_gumbel(batch_d_logits_t)  # [None, NUM_D_TOKENS]
+                batch_r_gumbel_t = self.add_gumbel(batch_r_logits_t)  # [None, NUM_R_TOKENS]
+
+                batch_p_out_t = tf.stop_gradient(tf.argmax(batch_p_gumbel_t, axis=-1))  # [None]
+                batch_d_out_t = tf.stop_gradient(tf.argmax(batch_d_gumbel_t, axis=-1))  # [None]
+                batch_r_out_t = tf.stop_gradient(tf.argmax(batch_r_gumbel_t, axis=-1))  # [None]
+
+                batch_p_out_oha_t = tf.nn.softmax(tf.multiply(batch_p_gumbel_t, self.temp))  # [None, NUM_P_TOKENS]
+                batch_d_out_oha_t = tf.nn.softmax(tf.multiply(batch_d_gumbel_t, self.temp))  # [None, NUM_D_TOKENS]
+                batch_r_out_oha_t = tf.nn.softmax(tf.multiply(batch_r_gumbel_t, self.temp))  # [None, NUM_R_TOKENS]
+
                 # No teacher forcing so avoid so-called exposure bias
                 batch_p_t = batch_p_out_oha_t
                 batch_d_t = batch_d_out_oha_t
@@ -217,20 +217,15 @@ class AdversarialDriver():
                 batch_d_out.append(tf.expand_dims(batch_d_out_t, 1))  # [None, 1]
                 batch_r_out.append(tf.expand_dims(batch_r_out_t, 1))  # [None, 1]
 
+                batch_p_out_oha.append(tf.expand_dims(batch_p_out_oha_t, 1))  # [None, 1, NUM_P_TOKENS]
+                batch_d_out_oha.append(tf.expand_dims(batch_d_out_oha_t, 1))  # [None, 1, NUM_D_TOKENS]
+                batch_r_out_oha.append(tf.expand_dims(batch_r_out_oha_t, 1))  # [None, 1, NUM_R_TOKENS]
+
             else:
                 # Teacher forcing the seed melody
                 batch_p_t = batch_p[:, t, :]  # [None, NUM_P_TOKENS]
                 batch_d_t = batch_d[:, t, :]  # [None, NUM_D_TOKENS]
                 batch_r_t = batch_r[:, t, :]  # [None, NUM_R_TOKENS]
-                # Appending the correct initial seed melody to the output
-                batch_p_out.append(tf.expand_dims(tf.argmax(batch_p_t, axis=1), 1))  # [None, 1]
-                batch_d_out.append(tf.expand_dims(tf.argmax(batch_d_t, axis=1), 1))  # [None, 1]
-                batch_r_out.append(tf.expand_dims(tf.argmax(batch_r_t, axis=1), 1))  # [None, 1]
-
-            batch_p_out_oha.append(tf.expand_dims(batch_p_out_oha_t, 1))  # [None, 1, NUM_P_TOKENS]
-            batch_d_out_oha.append(tf.expand_dims(batch_d_out_oha_t, 1))  # [None, 1, NUM_D_TOKENS]
-            batch_r_out_oha.append(tf.expand_dims(batch_r_out_oha_t, 1))  # [None, 1, NUM_R_TOKENS]
-
 
         batch_p_out = tf.concat(batch_p_out, axis=1)  # [None, song_length]
         batch_d_out = tf.concat(batch_d_out, axis=1)  # [None, song_length]
@@ -396,14 +391,32 @@ class AdversarialDriver():
         Perform generator forward pass.
         """
         g_out, _ = self._g_recurrence(batch_m, training=False)
+
         return g_out
 
-    @tf.function
-    def seed_generate(self, inp):
+    # @tf.function
+    def seed_generate(self, inp, output_seed=False):
         """
         Perform generator forward pass.
         """
+
         g_out, _ = self._seed_g_recurrence(inp, training=False)
+        if output_seed:
+            _, (batch_p, batch_d, batch_r) = inp
+            batch_p_out = []
+            batch_d_out = []
+            batch_r_out = []
+
+            for t in range(self.seed_len):
+                batch_p_out.append(tf.expand_dims(tf.argmax(batch_p[:, t, :], axis=1), 1))  # [None, 1]
+                batch_d_out.append(tf.expand_dims(tf.argmax(batch_d[:, t, :], axis=1), 1))  # [None, 1]
+                batch_r_out.append(tf.expand_dims(tf.argmax(batch_r[:, t, :], axis=1), 1))  # [None, 1]
+
+            batch_p_out = tf.concat(batch_p_out, axis=1)  # [None, song_length]
+            batch_d_out = tf.concat(batch_d_out, axis=1)  # [None, song_length]
+            batch_r_out = tf.concat(batch_r_out, axis=1)  # [None, song_length]
+
+            g_out = (tf.concat([batch_p_out, g_out[0]], axis=1), tf.concat([batch_d_out, g_out[1]], axis=1), tf.concat([batch_r_out, g_out[2]], axis=1))
         return g_out
 
     @tf.function

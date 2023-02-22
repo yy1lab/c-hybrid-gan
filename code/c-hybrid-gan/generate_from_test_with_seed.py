@@ -134,7 +134,7 @@ def main():
     inp = np.expand_dims(x_test[ID, :, :], 0), (np.expand_dims(y_p[ID, :, :], 0), np.expand_dims(y_d[ID, :, :], 0), np.expand_dims(y_r[ID, :, :], 0))
 
     # generate
-    out = adv_train_driver.seed_generate(inp)
+    out = adv_train_driver.seed_generate(inp, output_seed=True)
 
     # infer generated song attributes
     gen_attr = infer(out, LE_PATHS, is_tune=True)

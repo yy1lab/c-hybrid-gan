@@ -78,7 +78,7 @@ def main():
 
     # Initialise optimizer for adversarial training
     adv_train_g_opt = tf.keras.optimizers.Adam(ADV_TRAIN_G_LR, beta_1=0.9, beta_2=0.999)
-    adv_train_d_opt = tf.keras.optimizers.Adam(ADV_TRAIN_D_LR, beta_1=0.9, beta_2=0.999)
+    adv_train_d_opt = tf.keras.optimizers.AdamTrue(ADV_TRAIN_D_LR, beta_1=0.9, beta_2=0.999)
 
     ## Initialise Driver
 
@@ -316,7 +316,7 @@ def main():
 
         print()
 
-    # print average stats across runs
+    # print average  stats across runs
 
     print(f'\nC-Hybrid-GAN mean stats across {EVAL_RUNS} runs.\n')
     for key, value in result.items():
