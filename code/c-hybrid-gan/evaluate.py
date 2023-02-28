@@ -78,7 +78,7 @@ def main():
 
     # Initialise optimizer for adversarial training
     adv_train_g_opt = tf.keras.optimizers.Adam(ADV_TRAIN_G_LR, beta_1=0.9, beta_2=0.999)
-    adv_train_d_opt = tf.keras.optimizers.AdamTrue(ADV_TRAIN_D_LR, beta_1=0.9, beta_2=0.999)
+    adv_train_d_opt = tf.keras.optimizers.Adam(ADV_TRAIN_D_LR, beta_1=0.9, beta_2=0.999)
 
     ## Initialise Driver
 

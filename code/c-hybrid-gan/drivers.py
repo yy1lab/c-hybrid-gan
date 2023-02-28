@@ -134,7 +134,7 @@ class PreTrainDriver():
 class AdversarialDriver():
 
     def __init__(self, g_model, d_model, g_opt, d_opt, temp_max, steps_per_epoch, 
-               adv_train_epochs, max_grad_norm, num_tokens, seed_len=10):
+               adv_train_epochs, max_grad_norm, num_tokens, seed_len):
         """
         :param temp_max: maximum temperature a.k.a beta_max
         :param n_adv_steps : total number of adversarial steps
