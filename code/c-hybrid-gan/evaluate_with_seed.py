@@ -200,7 +200,7 @@ def main(SONG_LENGTH: int):
 
         # compute mmd
         test_p_mmd, test_d_mmd, test_r_mmd = compute_mmd_score(y_test_dat_attr_no_seed, y_test_gen_attr)
-        test_o_mmd = test_p_mmd + test_d_mmd + test_r_mmd
+        test_o_mmd = np.abs(test_p_mmd) + np.abs(test_d_mmd) + np.abs(test_r_mmd)
         print('pMMD: {}\ndMMD: {}\nrMMD: {}\noMMD: {}\n'.format(test_p_mmd, test_d_mmd, test_r_mmd, test_o_mmd))
 
         # compute stats
@@ -212,6 +212,9 @@ def main(SONG_LENGTH: int):
         for key, value in test_gen_mean_stats.items():
             result[key] = result.get(key, []) + [value]
             print(f"{key}: {value}")
+
+        result['oMMD'] = result.get('oMMD', []) + [test_o_mmd]
+        result['self-BLEU-4'] = result.get('self-BLEU-4', []) + [test_self_bleu[4]]
 
         # save test result logs for current run
 
@@ -289,7 +292,7 @@ def main(SONG_LENGTH: int):
 
         # compute mmd
         test_p_mmd, test_d_mmd, test_r_mmd = compute_mmd_score(y_test_dat_attr_no_seed, y_test_gen_attr)
-        test_o_mmd = test_p_mmd + test_d_mmd + test_r_mmd
+        test_o_mmd = np.abs(test_p_mmd) + np.abs(test_d_mmd) + np.abs(test_r_mmd)
         print('pMMD: {}\ndMMD: {}\nrMMD: {}\noMMD: {}\n'.format(test_p_mmd, test_d_mmd, test_r_mmd, test_o_mmd))
 
         # compute stats
@@ -303,7 +306,10 @@ def main(SONG_LENGTH: int):
             print(f"{key}: {value}")
 
         # save test result logs for current run
-        
+
+        result['oMMD'] = result.get('oMMD', []) + [test_o_mmd]
+        result['self-BLEU-4'] = result.get('self-BLEU-4', []) + [test_self_bleu[4]]
+
         for n_gram in N_GRAMS:
             logs[f'selfBLEU_{n_gram}'] = test_self_bleu[n_gram]
 
