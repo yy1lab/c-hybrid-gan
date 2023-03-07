@@ -1,3 +1,11 @@
+Samples used for testing:
+228: Queen - Don't stop me now [Tonight, Tonight, gonna, gonna, have, myself, myself, a, real, good, I, feel, feel, and, the, turning, turning, turning, inside, inside, And, floating, floating, around, around, in, ecstasy]
+773: The Cranberries - Zombie [family, in, your, head, in, your, head, they, are, fighting, fighting, with, their, tanks, and, their, bombs, and, their, bombs]
+889: In My Life - The Beatles [There, are, places, places, I, remember, remember, remember, my, life, though, some, have, changed, Some, forever, forever, forever, not, for, better, better, some, have, gone, and, some, remain]
+984: The Beatles - Hey Jude [Hey, Jude, make, it, bad, Take, a, sad, song, and, make, it, better, better, Remember, Remember, Remember, to, let, her, into, into, your, heart, then, you, can, start, to, make, it, better, better]
+988: Gimme Some Lovin' - The Blues Brothers [Well, my, rising, rising, and, my, feet, on, the, floor, Twenty, Twenty, people, people, and, they, wanna, wanna, go, more]
+
+
 ========================================================
 Conditional Hybrid GAN for Melody Generation from Lyrics
 ========================================================
