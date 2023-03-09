@@ -88,7 +88,7 @@ def main():
 
     ## Setup Checkpoint
 
-    if not IS_GAN:
+    if not IS_NOT_GAN:
         
         # Setup checkpoint for pretraining
         pre_train_ckpt = tf.train.Checkpoint(g_model=g_model,
@@ -161,12 +161,10 @@ if __name__ == '__main__':
     # construct the argument parser and parse the arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--ID", required=True, type=int, help="Id of a song in the test set")
-    # parser.add_argument("--SYLL_LYRICS", required=True, help="syllable lyrics for which melody is to be generated.", type=str)
-    # parser.add_argument("--WORD_LYRICS", required=True, help="word lyrics for which melody is to be generated.", type=str)
     parser.add_argument("--CKPT_PATH",   help="path to the model checkpoints.", type=str, 
                         default='../../checkpoints/adv_train_c_hybrid_gan')
     parser.add_argument("--MIDI_NAME", help="name of the generated melody", type=str)
-    parser.add_argument("--IS_GAN", help="If model checkpoint corresponds to GAN or not.", action='store_false')
+    parser.add_argument("--IS_NOT_GAN", help="If model checkpoint corresponds to GAN or not.", action='store_false')
 
     settings.update(vars(parser.parse_args()))
     settings = load_settings_from_file(settings)

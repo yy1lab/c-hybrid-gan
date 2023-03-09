@@ -12,6 +12,7 @@ Conditional Hybrid GAN for Melody Generation from Lyrics
 Yi Yu,  National Institute of Informatics,  Tokyo, Japan
 ========================================================
 Abhishek Srivastava, Rajiv Ratn Shah, IIIT, Delhi, India
+Karol Lasocki, Aalto University, Helsinki, Finland - seed melody modifications
 ========================================================
 
 Where to find the code ?
@@ -20,11 +21,16 @@ Where to find the code ?
 
         train.py is be used to train the model
         evaluate.py is used to evaluate the model on test data
+        evaluate_with_seed.py is used to evaluate the model on test data for models continuing initial melodies
+        evaluate_without_seed_for_last_notes.py is used to evaluate the model not conditioned on initial melodies,
+        only on lyrics, but only considering the last SONG_LENGTH - SEED_LENGTH notes, for comparing with seed models
         generate.py is used to generate melody for a given lyrics
-        
+        generate_from_test_with_seed.py is used to generate melody for a given test set ID, using the initial melody
+        and complete lyrics
+
         refer to ./code/c_hybrid_gan/run.ipynb for usage.
       
-    Code to produce visualisations can be found at ./code/viz
+    Code to produce visualisations can be found at ./code/viz, modified for seed melodies
 
         generated figures can be found at ./code/viz/figures
 
