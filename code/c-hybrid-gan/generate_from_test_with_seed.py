@@ -16,15 +16,15 @@ from gensim.models import Word2Vec
 import time
 
 def main():
-    
+
     """# Data"""
-    
+
     print("Data: \n")
-  
+
     NUM_P_TOKENS = len((pickle.load(open(P_LE_PATH, "rb"))).classes_)
     NUM_D_TOKENS = len((pickle.load(open(D_LE_PATH, "rb"))).classes_)
     NUM_R_TOKENS = len((pickle.load(open(R_LE_PATH, "rb"))).classes_)
-    
+
     NUM_TOKENS= [NUM_P_TOKENS, NUM_D_TOKENS, NUM_R_TOKENS]
     LE_PATHS  = [P_LE_PATH, D_LE_PATH, R_LE_PATH]
 
@@ -82,21 +82,21 @@ def main():
                                          TEMP_MAX,
                                          STEPS_PER_EPOCH_TRAIN,
                                          ADV_TRAIN_EPOCHS,
-                                         MAX_GRAD_NORM, 
+                                         MAX_GRAD_NORM,
                                          NUM_TOKENS,
-                                         seed_len=SEED_LENGTH)
+                                         seed_len=SEED_LENGTH if not COMPARE_WITH_NO_SEED else 0)
 
     ## Setup Checkpoint
 
     if IS_NOT_GAN:
-        
+
         # Setup checkpoint for pretraining
         pre_train_ckpt = tf.train.Checkpoint(g_model=g_model,
                                              pre_train_g_opt=pre_train_g_opt)
 
         pre_train_ckpt_manager = tf.train.CheckpointManager(
             pre_train_ckpt, CKPT_PATH, max_to_keep=PRE_TRAIN_EPOCHS)
-        
+
         # restore the pre-training checkpoint..
 
         if pre_train_ckpt_manager.latest_checkpoint:
@@ -107,9 +107,9 @@ def main():
         adv_train_driver.reset_temp()
 
         print('Temperature: {}'.format(adv_train_driver.temp.numpy()))
-        
+
     else:
-    
+
         # Setup checkpoint for adversarial training
         adv_train_ckpt = tf.train.Checkpoint(g_model=g_model,
                                              d_model=d_model,
@@ -118,9 +118,9 @@ def main():
 
         adv_train_ckpt_manager = tf.train.CheckpointManager(
             adv_train_ckpt, CKPT_PATH, max_to_keep=ADV_TRAIN_EPOCHS)
-        
+
         # restore the adversarial training checkpoint.
-        
+
         if adv_train_ckpt_manager.latest_checkpoint:
             adv_train_ckpt.restore(adv_train_ckpt_manager.latest_checkpoint).expect_partial()
             print ('Latest checkpoint restored from {}'.format(adv_train_ckpt_manager.latest_checkpoint))
@@ -137,13 +137,34 @@ def main():
     # generate
     out = adv_train_driver.seed_generate(inp, output_seed=True)
 
+    if COMPARE_WITH_NO_SEED:
+        _, (batch_p, batch_d, batch_r) = inp
+        batch_p_out = []
+        batch_d_out = []
+        batch_r_out = []
+
+        for t in range(SEED_LENGTH):
+            batch_p_out.append(tf.expand_dims(tf.argmax(batch_p[:, t, :], axis=1), 1))  # [None, 1]
+            batch_d_out.append(tf.expand_dims(tf.argmax(batch_d[:, t, :], axis=1), 1))  # [None, 1]
+            batch_r_out.append(tf.expand_dims(tf.argmax(batch_r[:, t, :], axis=1), 1))  # [None, 1]
+
+        batch_p_out = tf.concat(batch_p_out, axis=1)  # [None, song_length]
+        batch_d_out = tf.concat(batch_d_out, axis=1)  # [None, song_length]
+        batch_r_out = tf.concat(batch_r_out, axis=1)  # [None, song_length]
+
+        out = (
+            tf.concat([batch_p_out, out[0][:, SEED_LENGTH:]], axis=1),
+            tf.concat([batch_d_out, out[1][:, SEED_LENGTH:]], axis=1),
+            tf.concat([batch_r_out, out[2][:, SEED_LENGTH:]], axis=1)
+        )
+
     # infer generated song attributes
     gen_attr = infer(out, LE_PATHS, is_tune=True)
-    
+
     # gather song attributes
     gen_song = gather_song_attr(gen_attr, (1, song_length, NUM_SONG_FEATURES))
     gen_song = tf.squeeze(gen_song, 0).numpy()
-    
+
     gen_midi = create_midi_pattern_from_discretized_data(gen_song)
     if MIDI_NAME:
         gen_midi.write(f'../../results/c_hybrid_gan/melodies/{MIDI_NAME}.mid')
@@ -155,27 +176,34 @@ def main():
 
 
 if __name__ == '__main__':
-    
+
     settings = {'settings_file': 'settings'}
-    
+
     # construct the argument parser and parse the arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--ID", required=True, type=int, help="Id of a song in the test set")
-    parser.add_argument("--CKPT_PATH",   help="path to the model checkpoints.", type=str, 
+    parser.add_argument("--CKPT_PATH",   help="path to the model checkpoints.", type=str,
                         default='../../checkpoints/adv_train_c_hybrid_gan')
     parser.add_argument("--MIDI_NAME", help="name of the generated melody", type=str)
     parser.add_argument("--IS_NOT_GAN", help="If model checkpoint corresponds to GAN or not.", action='store_true')
+    parser.add_argument("--COMPARE_WITH_NO_SEED", help="Use when generating samples for a model not conditioned on "
+                                                       "initial melodies. It will generate the whole SONG_LENGTH"
+                                                       "note melody, and then replace the initial SEED_LENGTH notes"
+                                                       "with ground truth, so that you can compare with models "
+                                                       "conditioned on seed melodies",
+                        action='store_true')
+
 
     settings.update(vars(parser.parse_args()))
     settings = load_settings_from_file(settings)
-    
+
     print("Settings: \n")
     for (k, v) in settings.items():
         print(v, '\t', k)
-    
+
     locals().update(settings)
-    
+
     print("================================================================ \n " )
-    
+
     main()
-    
+
