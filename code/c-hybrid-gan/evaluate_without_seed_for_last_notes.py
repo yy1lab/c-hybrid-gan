@@ -5,20 +5,15 @@ Used to evaluate the last SONG_LENGTH - SEED_LENGTH notes agains ground truth
 and models using seed
 """
 
-import tensorflow as tf
-
 import pandas as pd
-import numpy as np
 
-import pickle
-
-from generator import *
 from discriminator import *
 from drivers import *
+from generator import *
 from utils import *
 
+
 def main(SONG_LENGTH: int):
-    
     """# Data"""
 
     print("Data: \n")
@@ -27,9 +22,9 @@ def main(SONG_LENGTH: int):
     NUM_P_TOKENS = len((pickle.load(open(P_LE_PATH, "rb"))).classes_)
     NUM_D_TOKENS = len((pickle.load(open(D_LE_PATH, "rb"))).classes_)
     NUM_R_TOKENS = len((pickle.load(open(R_LE_PATH, "rb"))).classes_)
-    
-    NUM_TOKENS= [NUM_P_TOKENS, NUM_D_TOKENS, NUM_R_TOKENS]
-    LE_PATHS  = [P_LE_PATH, D_LE_PATH, R_LE_PATH]
+
+    NUM_TOKENS = [NUM_P_TOKENS, NUM_D_TOKENS, NUM_R_TOKENS]
+    LE_PATHS = [P_LE_PATH, D_LE_PATH, R_LE_PATH]
 
     # load train (to compute STEPS_PER_EPOCH_TRAIN) and test data
 
@@ -39,22 +34,22 @@ def main(SONG_LENGTH: int):
                                                    NUM_SONG_FEATURES,
                                                    NUM_META_FEATURES)
 
-    x_test,  y_test_dat_attr,  y_test  = load_data(TEST_DATA_PATH,
-                                                   LE_PATHS,
-                                                   SONG_LENGTH,
-                                                   NUM_SONG_FEATURES,
-                                                   NUM_META_FEATURES,
-                                                   convert_to_tensor=True)
+    x_test, y_test_dat_attr, y_test = load_data(TEST_DATA_PATH,
+                                                LE_PATHS,
+                                                SONG_LENGTH,
+                                                NUM_SONG_FEATURES,
+                                                NUM_META_FEATURES,
+                                                convert_to_tensor=True)
 
     inp = x_test, y_test
 
     TRAIN_LEN = len(x_train)
-    TEST_LEN  = len(x_test)
+    TEST_LEN = len(x_test)
 
-    STEPS_PER_EPOCH_TRAIN = np.ceil(TRAIN_LEN/BATCH_SIZE)
+    STEPS_PER_EPOCH_TRAIN = np.ceil(TRAIN_LEN / BATCH_SIZE)
     print('Steps per epoch train: ', STEPS_PER_EPOCH_TRAIN)
 
-    print("================================================================ \n " )
+    print("================================================================ \n ")
 
     # Set seed for reproducibility
 
@@ -87,7 +82,7 @@ def main(SONG_LENGTH: int):
     ## Initialise Driver
 
     # Initialise pre-train driver
-    pre_train_driver = PreTrainDriver(g_model, 
+    pre_train_driver = PreTrainDriver(g_model,
                                       pre_train_g_opt,
                                       MAX_GRAD_NORM,
                                       NUM_TOKENS)
@@ -100,7 +95,7 @@ def main(SONG_LENGTH: int):
                                          TEMP_MAX,
                                          STEPS_PER_EPOCH_TRAIN,
                                          ADV_TRAIN_EPOCHS,
-                                         MAX_GRAD_NORM, 
+                                         MAX_GRAD_NORM,
                                          NUM_TOKENS,
                                          seed_len=SEED_LENGTH)
 
@@ -124,13 +119,13 @@ def main(SONG_LENGTH: int):
 
     if REUSE_TEST_RESULT_LOGS:
         # load test result logs from previous run
-        try: 
+        try:
             test_result_logs = pd.read_csv(TEST_RESULT_LOGS_FILENAME).to_dict('records')
-        except FileNotFoundError: 
+        except FileNotFoundError:
             test_result_logs = []
     else:
         test_result_logs = []
-            
+
     """# Evaluation"""
 
     SEED_LENGTH = 8
@@ -159,7 +154,7 @@ def main(SONG_LENGTH: int):
     np.save('../../results/test/test_dat_songs.npy', test_dat_songs)
     pickle.dump(test_dat_mean_stats, open('../../results/test/test_dat_mean_stats.pkl', 'wb'), pickle.HIGHEST_PROTOCOL)
 
-    print("================================================================ \n " )
+    print("================================================================ \n ")
 
     """## C-Hybrid-MLE"""
 
@@ -167,7 +162,7 @@ def main(SONG_LENGTH: int):
 
     if pre_train_ckpt_manager.latest_checkpoint:
         pre_train_ckpt.restore(pre_train_ckpt_manager.latest_checkpoint).expect_partial()
-        print ('Latest pretrain checkpoint restored from {}'.format(pre_train_ckpt_manager.latest_checkpoint))
+        print('Latest pretrain checkpoint restored from {}'.format(pre_train_ckpt_manager.latest_checkpoint))
 
     # reset the temperature
     adv_train_driver.reset_temp()
@@ -182,9 +177,9 @@ def main(SONG_LENGTH: int):
 
         print(f"\n ***** --run-{run_id}-- ***** \n")
 
-        logs = {'seed': SEED, 
-                'run_id' : run_id, 
-                'method' : 'C-Hybrid-MLE'}
+        logs = {'seed': SEED,
+                'run_id': run_id,
+                'method': 'C-Hybrid-MLE'}
 
         # generate test song attr.
         test_g_out = adv_train_driver.seed_generate(inp)
@@ -198,7 +193,7 @@ def main(SONG_LENGTH: int):
 
         # gather song attributes
         test_gen_songs = gather_song_attr(
-          y_test_gen_attr, (TEST_LEN, SONG_LENGTH, NUM_SONG_FEATURES))
+            y_test_gen_attr, (TEST_LEN, SONG_LENGTH, NUM_SONG_FEATURES))
 
         # compute self bleu
         test_self_bleu = compute_self_bleu_score(y_test_gen_attr, N_GRAMS)
@@ -211,7 +206,7 @@ def main(SONG_LENGTH: int):
 
         # compute stats
         test_gen_stats = gather_stats(
-          y_test_gen_attr, (TEST_LEN, SONG_LENGTH, NUM_SONG_FEATURES))
+            y_test_gen_attr, (TEST_LEN, SONG_LENGTH, NUM_SONG_FEATURES))
 
         test_gen_mean_stats = get_mean_stats(test_gen_stats, TEST_LEN)
         print('C-Hybrid-MLE mean stats')
@@ -246,13 +241,14 @@ def main(SONG_LENGTH: int):
 
     # save songs, attr & mean stats generated using C-Hybrid-MLE 
 
-    pickle.dump(y_test_gen_attr, open('../../results/c_hybrid_gan/generated/c_hybrid_mle_y_test_gen_attr.pkl', 'wb'), 
+    pickle.dump(y_test_gen_attr, open('../../results/c_hybrid_gan/generated/c_hybrid_mle_y_test_gen_attr.pkl', 'wb'),
                 pickle.HIGHEST_PROTOCOL)
     np.save('../../results/c_hybrid_gan/generated/c_hybrid_mle_test_gen_songs.npy', test_gen_songs)
-    pickle.dump(test_gen_mean_stats, open('../../results/c_hybrid_gan/generated/c_hybrid_mle_test_mean_stats.pkl', 'wb'),
+    pickle.dump(test_gen_mean_stats,
+                open('../../results/c_hybrid_gan/generated/c_hybrid_mle_test_mean_stats.pkl', 'wb'),
                 pickle.HIGHEST_PROTOCOL)
 
-    print("================================================================ \n " )
+    print("================================================================ \n ")
 
     """## C-Hybrid-GAN"""
 
@@ -260,10 +256,10 @@ def main(SONG_LENGTH: int):
 
     if adv_train_ckpt_manager.latest_checkpoint:
         adv_train_ckpt.restore(adv_train_ckpt_manager.latest_checkpoint).expect_partial()
-        print ('Latest checkpoint restored from {}'.format(adv_train_ckpt_manager.latest_checkpoint))
+        print('Latest checkpoint restored from {}'.format(adv_train_ckpt_manager.latest_checkpoint))
 
     # update the temperature
-    adv_train_driver.update_temp(ADV_TRAIN_EPOCHS-1, STEPS_PER_EPOCH_TRAIN-1)
+    adv_train_driver.update_temp(ADV_TRAIN_EPOCHS - 1, STEPS_PER_EPOCH_TRAIN - 1)
     print('Temperature: {}'.format(adv_train_driver.temp.numpy()))
 
     # Compute statistics & attribute info. of songs generated using C-Hybrid-GAN
@@ -271,13 +267,12 @@ def main(SONG_LENGTH: int):
     result = {}
 
     for run_id in range(EVAL_RUNS):
-      
+
         print(f"\n ***** --run-{run_id}-- ***** \n")
 
-        logs = {'seed'   : SEED,
-                'run_id' : run_id,
-                'method' : 'C-Hybrid-GAN'}
-
+        logs = {'seed': SEED,
+                'run_id': run_id,
+                'method': 'C-Hybrid-GAN'}
 
         # generate test song attr.
         test_g_out = adv_train_driver.seed_generate(inp)
@@ -291,7 +286,7 @@ def main(SONG_LENGTH: int):
 
         # gather song attributes
         test_gen_songs = gather_song_attr(
-          y_test_gen_attr, (TEST_LEN, SONG_LENGTH, NUM_SONG_FEATURES))
+            y_test_gen_attr, (TEST_LEN, SONG_LENGTH, NUM_SONG_FEATURES))
 
         # compute self bleu
         test_self_bleu = compute_self_bleu_score(y_test_gen_attr, N_GRAMS)
@@ -304,7 +299,7 @@ def main(SONG_LENGTH: int):
 
         # compute stats
         test_gen_stats = gather_stats(
-          y_test_gen_attr, (TEST_LEN, SONG_LENGTH, NUM_SONG_FEATURES))
+            y_test_gen_attr, (TEST_LEN, SONG_LENGTH, NUM_SONG_FEATURES))
 
         test_gen_mean_stats = get_mean_stats(test_gen_stats, TEST_LEN)
         print('C-Hybrid-GAN mean stats')
@@ -339,28 +334,29 @@ def main(SONG_LENGTH: int):
 
     # save songs, attr & mean stats generated using C-Hybrid-GAN
 
-    pickle.dump(y_test_gen_attr, open('../../results/c_hybrid_gan/generated/c_hybrid_gan_y_test_gen_attr.pkl', 'wb'), 
+    pickle.dump(y_test_gen_attr, open('../../results/c_hybrid_gan/generated/c_hybrid_gan_y_test_gen_attr.pkl', 'wb'),
                 pickle.HIGHEST_PROTOCOL)
     np.save('../../results/c_hybrid_gan/generated/c_hybrid_gan_test_gen_songs.npy', test_gen_songs)
-    pickle.dump(test_gen_mean_stats, open('../../results/c_hybrid_gan/generated/c_hybrid_gan_test_mean_stats.pkl', 'wb'),
+    pickle.dump(test_gen_mean_stats,
+                open('../../results/c_hybrid_gan/generated/c_hybrid_gan_test_mean_stats.pkl', 'wb'),
                 pickle.HIGHEST_PROTOCOL)
 
     # save test result logs as csv file
 
     pd.DataFrame.from_records(test_result_logs).to_csv(TEST_RESULT_LOGS_FILENAME, index=False)
 
+
 if __name__ == '__main__':
-    
+
     settings = {'settings_file': 'settings'}
     settings = load_settings_from_file(settings)
-    
+
     print("Settings: \n")
     for (k, v) in settings.items():
         print(v, '\t', k)
-    
+
     locals().update(settings)
-    
-    print("================================================================ \n " )
-    
+
+    print("================================================================ \n ")
+
     main(SONG_LENGTH=SONG_LENGTH)
-    

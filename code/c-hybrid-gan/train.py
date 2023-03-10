@@ -2,23 +2,22 @@
 Script to train the C-Hybrid-MLE & C-Hybrid-GAN model on test data.
 C-Hybrid-MLE is the model obtained at the end of pre-training."""
 
-import tensorflow as tf
-import pandas as pd
-
-from generator import *
-from discriminator import *
-from drivers import PreTrainDriver, AdversarialDriver
-from utils import *
-
+import os
 import time
 
-import os
+import pandas as pd
+
+from discriminator import *
+from drivers import PreTrainDriver, AdversarialDriver
+from generator import *
+from utils import *
+
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
+
 def main():
-    
     """# Data"""
-    
+
     print("Data: \n")
 
     # create label encoders for each song attribute
@@ -27,8 +26,8 @@ def main():
 
     print("Shape of full data:: ", data.shape)
 
-    y = data[:, :SONG_LENGTH * NUM_SONG_FEATURES]              # 60 cols
-    y = np.reshape(y, (-1, SONG_LENGTH, NUM_SONG_FEATURES))    # 60 = 20 x 3: 1 pitch, 2 duration, 3 rest
+    y = data[:, :SONG_LENGTH * NUM_SONG_FEATURES]  # 60 cols
+    y = np.reshape(y, (-1, SONG_LENGTH, NUM_SONG_FEATURES))  # 60 = 20 x 3: 1 pitch, 2 duration, 3 rest
 
     print("Shape of melody data:", y.shape)
 
@@ -45,8 +44,8 @@ def main():
     NUM_D_TOKENS = create_categorical_2d_encoder(y_d, D_LE_PATH)
     NUM_R_TOKENS = create_categorical_2d_encoder(y_r, R_LE_PATH)
 
-    NUM_TOKENS= [NUM_P_TOKENS, NUM_D_TOKENS, NUM_R_TOKENS]
-    LE_PATHS  = [P_LE_PATH, D_LE_PATH, R_LE_PATH]
+    NUM_TOKENS = [NUM_P_TOKENS, NUM_D_TOKENS, NUM_R_TOKENS]
+    LE_PATHS = [P_LE_PATH, D_LE_PATH, R_LE_PATH]
 
     # load train, validation and test data
 
@@ -63,18 +62,18 @@ def main():
                                                    NUM_META_FEATURES,
                                                    convert_to_tensor=True)
 
-    x_test,  y_test_dat_attr,  y_test  = load_data(TEST_DATA_PATH,
-                                                   LE_PATHS,
-                                                   SONG_LENGTH,
-                                                   NUM_SONG_FEATURES,
-                                                   NUM_META_FEATURES,
-                                                   convert_to_tensor=True)
+    x_test, y_test_dat_attr, y_test = load_data(TEST_DATA_PATH,
+                                                LE_PATHS,
+                                                SONG_LENGTH,
+                                                NUM_SONG_FEATURES,
+                                                NUM_META_FEATURES,
+                                                convert_to_tensor=True)
 
     TRAIN_LEN = len(x_train)
     VALID_LEN = len(x_valid)
-    TEST_LEN  = len(x_test)
+    TEST_LEN = len(x_test)
 
-    STEPS_PER_EPOCH_TRAIN = np.ceil(TRAIN_LEN/BATCH_SIZE)
+    STEPS_PER_EPOCH_TRAIN = np.ceil(TRAIN_LEN / BATCH_SIZE)
     print('Steps per epoch train: ', STEPS_PER_EPOCH_TRAIN)
 
     # create train dataset object
@@ -83,7 +82,7 @@ def main():
     train_dataset = train_dataset.shuffle(TRAIN_LEN)
     train_dataset = train_dataset.batch(BATCH_SIZE, drop_remainder=False)
 
-    print("================================================================ \n " )
+    print("================================================================ \n ")
 
     """# Training"""
 
@@ -157,13 +156,13 @@ def main():
 
     train_summary_writer = tf.summary.create_file_writer(TRAIN_LOG_DIR)
     valid_summary_writer = tf.summary.create_file_writer(VALID_LOG_DIR)
-    test_summary_writer  = tf.summary.create_file_writer(TEST_LOG_DIR)
-    
+    test_summary_writer = tf.summary.create_file_writer(TEST_LOG_DIR)
+
     if REUSE_TEST_LOGS:
         # load test logs from previous run
-        try: 
+        try:
             test_logs = pd.read_csv(TEST_LOGS_FILENAME).to_dict('records')
-        except FileNotFoundError: 
+        except FileNotFoundError:
             test_logs = []
     else:
         test_logs = []
@@ -190,9 +189,9 @@ def main():
         start = time.time()
 
         # log test metrics for current epoch
-        logs = {'seed' : SEED,
+        logs = {'seed': SEED,
                 'epoch': epoch,
-                'base' : 'rmc'}
+                'base': 'rmc'}
 
         total_train_p_loss = 0
         total_train_d_loss = 0
@@ -277,34 +276,34 @@ def main():
 
             test_logs.append(logs)
 
-            print ('Epoch {} Pitch Loss: Train: {:.4f} Validation: {:.4f}'.format(
-                epoch+1, train_p_loss, valid_p_loss))
+            print('Epoch {} Pitch Loss: Train: {:.4f} Validation: {:.4f}'.format(
+                epoch + 1, train_p_loss, valid_p_loss))
 
-            print ('Epoch {} Duration Loss: Train: {:.4f} Validation: {:.4f}'.format(
-                epoch+1, train_d_loss, valid_d_loss))
+            print('Epoch {} Duration Loss: Train: {:.4f} Validation: {:.4f}'.format(
+                epoch + 1, train_d_loss, valid_d_loss))
 
-            print ('Epoch {} Rest Loss: Train: {:.4f} Validation: {:.4f}'.format(
-                epoch+1, train_r_loss, valid_r_loss))
+            print('Epoch {} Rest Loss: Train: {:.4f} Validation: {:.4f}'.format(
+                epoch + 1, train_r_loss, valid_r_loss))
 
         # create a checkpoint
         pre_train_ckpt_save_path = pre_train_ckpt_manager.save()
         print('Saving pretrain checkpoint for epoch {} at {}'.format(
-            epoch+1, pre_train_ckpt_save_path))
+            epoch + 1, pre_train_ckpt_save_path))
 
-        print ('Time taken for 1 epoch: {} secs\n'.format(time.time() - start))
+        print('Time taken for 1 epoch: {} secs\n'.format(time.time() - start))
 
     ## Adversarial Training
 
     print('\n ***** Starting Adversarial Training ***** \n')
 
     # Temperature updates are done at step-level
-    
+
     for epoch in range(ADV_TRAIN_EPOCHS):
         start = time.time()
 
-        logs = {'seed' : SEED,
-                'epoch': epoch+PRE_TRAIN_EPOCHS,
-                'base' : 'rmc'}
+        logs = {'seed': SEED,
+                'epoch': epoch + PRE_TRAIN_EPOCHS,
+                'base': 'rmc'}
 
         total_train_g_loss = 0
         total_train_d_loss = 0
@@ -319,10 +318,10 @@ def main():
 
             with train_summary_writer.as_default():
                 tf.summary.scalar('temperature', tf.keras.backend.get_value(adv_train_driver.temp),
-                                  step=epoch*STEPS_PER_EPOCH_TRAIN+step)
+                                  step=epoch * STEPS_PER_EPOCH_TRAIN + step)
 
-        train_g_loss = total_train_g_loss/STEPS_PER_EPOCH_TRAIN
-        train_d_loss = total_train_d_loss/STEPS_PER_EPOCH_TRAIN
+        train_g_loss = total_train_g_loss / STEPS_PER_EPOCH_TRAIN
+        train_d_loss = total_train_d_loss / STEPS_PER_EPOCH_TRAIN
 
         if epoch % EVAL_INTERVAL == 0:
 
@@ -346,10 +345,10 @@ def main():
                 tf.summary.scalar('g_loss', valid_g_loss, step=epoch)
                 tf.summary.scalar('d_loss', valid_d_loss, step=epoch)
 
-                tf.summary.scalar('pMMD', valid_p_mmd, step=epoch+PRE_TRAIN_EPOCHS)
-                tf.summary.scalar('dMMD', valid_d_mmd, step=epoch+PRE_TRAIN_EPOCHS)
-                tf.summary.scalar('rMMD', valid_r_mmd, step=epoch+PRE_TRAIN_EPOCHS)
-                tf.summary.scalar('oMMD', valid_o_mmd, step=epoch+PRE_TRAIN_EPOCHS)
+                tf.summary.scalar('pMMD', valid_p_mmd, step=epoch + PRE_TRAIN_EPOCHS)
+                tf.summary.scalar('dMMD', valid_d_mmd, step=epoch + PRE_TRAIN_EPOCHS)
+                tf.summary.scalar('rMMD', valid_r_mmd, step=epoch + PRE_TRAIN_EPOCHS)
+                tf.summary.scalar('oMMD', valid_o_mmd, step=epoch + PRE_TRAIN_EPOCHS)
 
             # testing
 
@@ -369,12 +368,12 @@ def main():
             # log test summary
             with test_summary_writer.as_default():
                 for n_gram in N_GRAMS:
-                    tf.summary.scalar(f'selfBLEU_{n_gram}', test_self_bleu[n_gram], step=epoch+PRE_TRAIN_EPOCHS)
+                    tf.summary.scalar(f'selfBLEU_{n_gram}', test_self_bleu[n_gram], step=epoch + PRE_TRAIN_EPOCHS)
 
-                tf.summary.scalar('pMMD', test_p_mmd, step=epoch+PRE_TRAIN_EPOCHS)
-                tf.summary.scalar('dMMD', test_d_mmd, step=epoch+PRE_TRAIN_EPOCHS)
-                tf.summary.scalar('rMMD', test_r_mmd, step=epoch+PRE_TRAIN_EPOCHS)
-                tf.summary.scalar('oMMD', test_o_mmd, step=epoch+PRE_TRAIN_EPOCHS)
+                tf.summary.scalar('pMMD', test_p_mmd, step=epoch + PRE_TRAIN_EPOCHS)
+                tf.summary.scalar('dMMD', test_d_mmd, step=epoch + PRE_TRAIN_EPOCHS)
+                tf.summary.scalar('rMMD', test_r_mmd, step=epoch + PRE_TRAIN_EPOCHS)
+                tf.summary.scalar('oMMD', test_o_mmd, step=epoch + PRE_TRAIN_EPOCHS)
 
                 # save test logs for current epoch
 
@@ -389,15 +388,15 @@ def main():
             test_logs.append(logs)
 
             print('Epoch {} Train loss: G:{:.4f}, D:{:.4f}, Valid loss: G:{:.4f}, D:{:.4f}'.format(
-                epoch+1, train_g_loss, train_d_loss, valid_g_loss, valid_d_loss))
+                epoch + 1, train_g_loss, train_d_loss, valid_g_loss, valid_d_loss))
 
         # create a checkpoint
         adv_train_ckpt_save_path = adv_train_ckpt_manager.save()
         print('Saving checkpoint for epoch {} at {}'.format(
-          epoch+1, adv_train_ckpt_save_path))
+            epoch + 1, adv_train_ckpt_save_path))
 
         print('Temperature used for epoch {} : {}'.format(
-          epoch+1, tf.keras.backend.get_value(adv_train_driver.temp)))
+            epoch + 1, tf.keras.backend.get_value(adv_train_driver.temp)))
 
         print('Time taken for 1 epoch {} sec\n'.format(time.time() - start))
 
@@ -405,20 +404,20 @@ def main():
 
     pd.DataFrame.from_records(test_logs).to_csv(TEST_LOGS_FILENAME, index=False)
 
+
 if __name__ == '__main__':
-    
+
     settings = {'settings_file': 'settings'}
     settings = load_settings_from_file(settings)
 
     print("Settings: \n")
     for (k, v) in settings.items():
         print(v, '\t', k)
-    
-    locals().update(settings)
-    
-    print("================================================================ \n " )
-    
-    main()
-    
-    print("Training is complete.")
 
+    locals().update(settings)
+
+    print("================================================================ \n ")
+
+    main()
+
+    print("Training is complete.")

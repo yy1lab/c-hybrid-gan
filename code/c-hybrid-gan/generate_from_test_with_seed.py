@@ -1,22 +1,16 @@
 """
 Script to generate a melody for a given lyrics (syllable-lyrics & word-lyrics)."""
-import tensorflow as tf
-
-import numpy as np
-
-import pickle
-
-from generator import *
-from discriminator import *
-from drivers import *
-from utils import *
 
 import argparse
-from gensim.models import Word2Vec
 import time
 
-def main():
+from discriminator import *
+from drivers import *
+from generator import *
+from utils import *
 
+
+def main():
     """# Data"""
 
     print("Data: \n")
@@ -25,8 +19,8 @@ def main():
     NUM_D_TOKENS = len((pickle.load(open(D_LE_PATH, "rb"))).classes_)
     NUM_R_TOKENS = len((pickle.load(open(R_LE_PATH, "rb"))).classes_)
 
-    NUM_TOKENS= [NUM_P_TOKENS, NUM_D_TOKENS, NUM_R_TOKENS]
-    LE_PATHS  = [P_LE_PATH, D_LE_PATH, R_LE_PATH]
+    NUM_TOKENS = [NUM_P_TOKENS, NUM_D_TOKENS, NUM_R_TOKENS]
+    LE_PATHS = [P_LE_PATH, D_LE_PATH, R_LE_PATH]
 
     # load train data -- to compute STEPS_PER_EPOCH_TRAIN
 
@@ -36,17 +30,16 @@ def main():
                                                    NUM_SONG_FEATURES,
                                                    NUM_META_FEATURES)
 
-
-    x_test,  y_test_dat_attr,  y_test  = load_data(TEST_DATA_PATH,
-                                                   LE_PATHS,
-                                                   SONG_LENGTH,
-                                                   NUM_SONG_FEATURES,
-                                                   NUM_META_FEATURES,
-                                                   convert_to_tensor=True)
+    x_test, y_test_dat_attr, y_test = load_data(TEST_DATA_PATH,
+                                                LE_PATHS,
+                                                SONG_LENGTH,
+                                                NUM_SONG_FEATURES,
+                                                NUM_META_FEATURES,
+                                                convert_to_tensor=True)
 
     TRAIN_LEN = len(x_train)
 
-    STEPS_PER_EPOCH_TRAIN = np.ceil(TRAIN_LEN/BATCH_SIZE)
+    STEPS_PER_EPOCH_TRAIN = np.ceil(TRAIN_LEN / BATCH_SIZE)
     print('Steps per epoch train: ', STEPS_PER_EPOCH_TRAIN)
 
     ## Initialise Model
@@ -101,7 +94,7 @@ def main():
 
         if pre_train_ckpt_manager.latest_checkpoint:
             pre_train_ckpt.restore(pre_train_ckpt_manager.latest_checkpoint).expect_partial()
-            print ('Latest pretrain checkpoint restored from {}'.format(pre_train_ckpt_manager.latest_checkpoint))
+            print('Latest pretrain checkpoint restored from {}'.format(pre_train_ckpt_manager.latest_checkpoint))
 
         # reset the temperature
         adv_train_driver.reset_temp()
@@ -123,16 +116,16 @@ def main():
 
         if adv_train_ckpt_manager.latest_checkpoint:
             adv_train_ckpt.restore(adv_train_ckpt_manager.latest_checkpoint).expect_partial()
-            print ('Latest checkpoint restored from {}'.format(adv_train_ckpt_manager.latest_checkpoint))
+            print('Latest checkpoint restored from {}'.format(adv_train_ckpt_manager.latest_checkpoint))
 
         # update the temperature
-        adv_train_driver.update_temp(ADV_TRAIN_EPOCHS-1, STEPS_PER_EPOCH_TRAIN-1)
+        adv_train_driver.update_temp(ADV_TRAIN_EPOCHS - 1, STEPS_PER_EPOCH_TRAIN - 1)
         print('Temperature: {}'.format(adv_train_driver.temp.numpy()))
-
 
     y_p, y_d, y_r = y_test
     song_length = y_p.shape[1]
-    inp = np.expand_dims(x_test[ID, :, :], 0), (np.expand_dims(y_p[ID, :, :], 0), np.expand_dims(y_d[ID, :, :], 0), np.expand_dims(y_r[ID, :, :], 0))
+    inp = np.expand_dims(x_test[ID, :, :], 0), (
+    np.expand_dims(y_p[ID, :, :], 0), np.expand_dims(y_d[ID, :, :], 0), np.expand_dims(y_r[ID, :, :], 0))
 
     # generate
     out = adv_train_driver.seed_generate(inp, output_seed=True)
@@ -182,7 +175,7 @@ if __name__ == '__main__':
     # construct the argument parser and parse the arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--ID", required=True, type=int, help="Id of a song in the test set")
-    parser.add_argument("--CKPT_PATH",   help="path to the model checkpoints.", type=str,
+    parser.add_argument("--CKPT_PATH", help="path to the model checkpoints.", type=str,
                         default='../../checkpoints/adv_train_c_hybrid_gan')
     parser.add_argument("--MIDI_NAME", help="name of the generated melody", type=str)
     parser.add_argument("--IS_NOT_GAN", help="If model checkpoint corresponds to GAN or not.", action='store_true')
@@ -193,7 +186,6 @@ if __name__ == '__main__':
                                                        "conditioned on seed melodies",
                         action='store_true')
 
-
     settings.update(vars(parser.parse_args()))
     settings = load_settings_from_file(settings)
 
@@ -203,7 +195,6 @@ if __name__ == '__main__':
 
     locals().update(settings)
 
-    print("================================================================ \n " )
+    print("================================================================ \n ")
 
     main()
-

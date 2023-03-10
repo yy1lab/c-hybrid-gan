@@ -7,13 +7,11 @@
 
 '''
 
-import matplotlib.pyplot as plt
-from pylab import rcParams
-
-import numpy as np
-import pandas as pd
 import pickle
 
+import matplotlib.pyplot as plt
+import numpy as np
+from pylab import rcParams
 from scipy.stats import entropy
 
 # %%

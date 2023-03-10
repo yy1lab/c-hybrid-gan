@@ -5,6 +5,7 @@ import tensorflow as tf
 """Encapsulates pre-training logic.
 """
 
+
 class PreTrainDriver():
 
     def __init__(self, g_model, g_opt, max_grad_norm, num_tokens):
@@ -20,7 +21,7 @@ class PreTrainDriver():
         batch_m, (batch_p, batch_d, batch_r) = inp
 
         batch_size = batch_m.shape[0]
-        song_length= batch_m.shape[1]
+        song_length = batch_m.shape[1]
 
         batch_p_prob = []
         batch_d_prob = []
@@ -37,28 +38,28 @@ class PreTrainDriver():
         batch_r_t = tf.random.uniform((batch_size, self.num_tokens[2]), 0.0, 1.0)
 
         # generator forward pass
-        for t in range(song_length): 
+        for t in range(song_length):
             batch_m_t = batch_m[:, t, :]
             batch_n_t = batch_p_t, batch_d_t, batch_r_t
             (batch_p_logits_t, batch_d_logits_t, batch_r_logits_t), g_memory = self.g_model(
-              (batch_m_t, batch_n_t), g_memory, training=training)
+                (batch_m_t, batch_n_t), g_memory, training=training)
 
-            batch_p_prob_t = tf.nn.softmax(batch_p_logits_t, axis=-1) # [None, NUM_P_TOKENS]
-            batch_d_prob_t = tf.nn.softmax(batch_d_logits_t, axis=-1) # [None, NUM_D_TOKENS]
-            batch_r_prob_t = tf.nn.softmax(batch_r_logits_t, axis=-1) # [None, NUM_R_TOKENS]
+            batch_p_prob_t = tf.nn.softmax(batch_p_logits_t, axis=-1)  # [None, NUM_P_TOKENS]
+            batch_d_prob_t = tf.nn.softmax(batch_d_logits_t, axis=-1)  # [None, NUM_D_TOKENS]
+            batch_r_prob_t = tf.nn.softmax(batch_r_logits_t, axis=-1)  # [None, NUM_R_TOKENS]
 
-            batch_p_prob.append(tf.expand_dims(batch_p_prob_t, 1)) # [None, 1, NUM_P_TOKENS]
-            batch_d_prob.append(tf.expand_dims(batch_d_prob_t, 1)) # [None, 1, NUM_D_TOKENS]
-            batch_r_prob.append(tf.expand_dims(batch_r_prob_t, 1)) # [None, 1, NUM_R_TOKENS]
+            batch_p_prob.append(tf.expand_dims(batch_p_prob_t, 1))  # [None, 1, NUM_P_TOKENS]
+            batch_d_prob.append(tf.expand_dims(batch_d_prob_t, 1))  # [None, 1, NUM_D_TOKENS]
+            batch_r_prob.append(tf.expand_dims(batch_r_prob_t, 1))  # [None, 1, NUM_R_TOKENS]
 
             # teacher forcing
-            batch_p_t = batch_p[:, t, :] # [None, NUM_P_TOKENS]
-            batch_d_t = batch_d[:, t, :] # [None, NUM_D_TOKENS]
-            batch_r_t = batch_r[:, t, :] # [None, NUM_R_TOKENS]
+            batch_p_t = batch_p[:, t, :]  # [None, NUM_P_TOKENS]
+            batch_d_t = batch_d[:, t, :]  # [None, NUM_D_TOKENS]
+            batch_r_t = batch_r[:, t, :]  # [None, NUM_R_TOKENS]
 
-        batch_p_prob = tf.concat(batch_p_prob, axis=1) # [None, song_length, NUM_P_TOKENS]
-        batch_d_prob = tf.concat(batch_d_prob, axis=1) # [None, song_length, NUM_D_TOKENS]
-        batch_r_prob = tf.concat(batch_r_prob, axis=1) # [None, song_length, NUM_R_TOKENS]
+        batch_p_prob = tf.concat(batch_p_prob, axis=1)  # [None, song_length, NUM_P_TOKENS]
+        batch_d_prob = tf.concat(batch_d_prob, axis=1)  # [None, song_length, NUM_D_TOKENS]
+        batch_r_prob = tf.concat(batch_r_prob, axis=1)  # [None, song_length, NUM_R_TOKENS]
 
         return batch_p_prob, batch_d_prob, batch_r_prob
 
@@ -68,34 +69,34 @@ class PreTrainDriver():
         :shape pred: [None, SONG_LENGTH, NUM_P/D/R_TOKENS]
         """
         batch_size = true.shape[0]
-        song_length= true.shape[1]
+        song_length = true.shape[1]
 
         true = tf.reshape(true, (batch_size * song_length, -1))
         pred = tf.reshape(pred, (batch_size * song_length, -1))
         pred = tf.math.log(tf.clip_by_value(pred, 1e-20, 1.0))
-        loss= -tf.reduce_sum(true * pred) / (batch_size * song_length)
+        loss = -tf.reduce_sum(true * pred) / (batch_size * song_length)
 
         return loss
 
     def _compute_loss(self, inp, out):
-        batch_m, (batch_p, batch_d, batch_r)     = inp
+        batch_m, (batch_p, batch_d, batch_r) = inp
         batch_p_prob, batch_d_prob, batch_r_prob = out
 
         # loss computation
-        p_loss = self._loss_fn(batch_p, batch_p_prob)      
-        d_loss = self._loss_fn(batch_d, batch_d_prob)      
-        r_loss = self._loss_fn(batch_r, batch_r_prob)      
+        p_loss = self._loss_fn(batch_p, batch_p_prob)
+        d_loss = self._loss_fn(batch_d, batch_d_prob)
+        r_loss = self._loss_fn(batch_r, batch_r_prob)
 
         return p_loss, d_loss, r_loss
 
     def _step(self, inp, training=False):
         # forward pass
-        g_out = self._g_recurrence(inp, training=training) 
+        g_out = self._g_recurrence(inp, training=training)
         # loss computation
-        g_loss = self._compute_loss(inp, g_out) 
+        g_loss = self._compute_loss(inp, g_out)
 
         return g_loss
-    
+
     @tf.function
     def train_step(self, inp):
         """Pretrain generator.
@@ -111,8 +112,8 @@ class PreTrainDriver():
         d_grads, _ = tf.clip_by_global_norm(g_tape.gradient(d_loss, d_vars), self.max_grad_norm)
         r_grads, _ = tf.clip_by_global_norm(g_tape.gradient(r_loss, r_vars), self.max_grad_norm)
 
-        g_vars  = p_vars  + d_vars  + r_vars 
-        g_grads = p_grads + d_grads + r_grads 
+        g_vars = p_vars + d_vars + r_vars
+        g_grads = p_grads + d_grads + r_grads
 
         self.g_opt.apply_gradients(zip(g_grads, g_vars))
 
@@ -127,14 +128,17 @@ class PreTrainDriver():
         p_loss, d_loss, r_loss = self._step(inp, training=False)
         return p_loss, d_loss, r_loss
 
+
 """## Adversarial Driver"""
 
 """Encapsulates adversarial training and inference logic.
 """
+
+
 class AdversarialDriver():
 
-    def __init__(self, g_model, d_model, g_opt, d_opt, temp_max, steps_per_epoch, 
-               adv_train_epochs, max_grad_norm, num_tokens, seed_len):
+    def __init__(self, g_model, d_model, g_opt, d_opt, temp_max, steps_per_epoch,
+                 adv_train_epochs, max_grad_norm, num_tokens, seed_len):
         """
         :param temp_max: maximum temperature a.k.a beta_max
         :param n_adv_steps : total number of adversarial steps
@@ -254,7 +258,7 @@ class AdversarialDriver():
         batch_r_out_oha = []
 
         batch_size = batch_m.shape[0]
-        song_length= batch_m.shape[1]
+        song_length = batch_m.shape[1]
 
         g_memory = (
             self.g_model.p_subg.rmc.initial_state(batch_size),
@@ -267,46 +271,46 @@ class AdversarialDriver():
         batch_r_t = tf.random.uniform((batch_size, self.num_tokens[2]), 0.0, 1.0)
 
         # generator forward pass
-        for t in range(song_length): 
+        for t in range(song_length):
             batch_m_t = batch_m[:, t, :]
             batch_n_t = batch_p_t, batch_d_t, batch_r_t
             (batch_p_logits_t, batch_d_logits_t, batch_r_logits_t), g_memory = self.g_model(
-              (batch_m_t, batch_n_t), g_memory, training=training) 
+                (batch_m_t, batch_n_t), g_memory, training=training)
 
-            batch_p_gumbel_t = self.add_gumbel(batch_p_logits_t) # [None, NUM_P_TOKENS]
-            batch_d_gumbel_t = self.add_gumbel(batch_d_logits_t) # [None, NUM_D_TOKENS]
-            batch_r_gumbel_t = self.add_gumbel(batch_r_logits_t) # [None, NUM_R_TOKENS]
+            batch_p_gumbel_t = self.add_gumbel(batch_p_logits_t)  # [None, NUM_P_TOKENS]
+            batch_d_gumbel_t = self.add_gumbel(batch_d_logits_t)  # [None, NUM_D_TOKENS]
+            batch_r_gumbel_t = self.add_gumbel(batch_r_logits_t)  # [None, NUM_R_TOKENS]
 
-            batch_p_out_t = tf.stop_gradient(tf.argmax(batch_p_gumbel_t, axis=-1)) # [None]
-            batch_d_out_t = tf.stop_gradient(tf.argmax(batch_d_gumbel_t, axis=-1)) # [None]
-            batch_r_out_t = tf.stop_gradient(tf.argmax(batch_r_gumbel_t, axis=-1)) # [None]
+            batch_p_out_t = tf.stop_gradient(tf.argmax(batch_p_gumbel_t, axis=-1))  # [None]
+            batch_d_out_t = tf.stop_gradient(tf.argmax(batch_d_gumbel_t, axis=-1))  # [None]
+            batch_r_out_t = tf.stop_gradient(tf.argmax(batch_r_gumbel_t, axis=-1))  # [None]
 
-            batch_p_out_oha_t = tf.nn.softmax(tf.multiply(batch_p_gumbel_t, self.temp)) # [None, NUM_P_TOKENS]
-            batch_d_out_oha_t = tf.nn.softmax(tf.multiply(batch_d_gumbel_t, self.temp)) # [None, NUM_D_TOKENS]
-            batch_r_out_oha_t = tf.nn.softmax(tf.multiply(batch_r_gumbel_t, self.temp)) # [None, NUM_R_TOKENS]
+            batch_p_out_oha_t = tf.nn.softmax(tf.multiply(batch_p_gumbel_t, self.temp))  # [None, NUM_P_TOKENS]
+            batch_d_out_oha_t = tf.nn.softmax(tf.multiply(batch_d_gumbel_t, self.temp))  # [None, NUM_D_TOKENS]
+            batch_r_out_oha_t = tf.nn.softmax(tf.multiply(batch_r_gumbel_t, self.temp))  # [None, NUM_R_TOKENS]
 
             batch_p_out.append(tf.expand_dims(batch_p_out_t, 1))  # [None, 1]
             batch_d_out.append(tf.expand_dims(batch_d_out_t, 1))  # [None, 1]
             batch_r_out.append(tf.expand_dims(batch_r_out_t, 1))  # [None, 1]
 
-            batch_p_out_oha.append(tf.expand_dims(batch_p_out_oha_t, 1)) # [None, 1, NUM_P_TOKENS]
-            batch_d_out_oha.append(tf.expand_dims(batch_d_out_oha_t, 1)) # [None, 1, NUM_D_TOKENS]
-            batch_r_out_oha.append(tf.expand_dims(batch_r_out_oha_t, 1)) # [None, 1, NUM_R_TOKENS]
+            batch_p_out_oha.append(tf.expand_dims(batch_p_out_oha_t, 1))  # [None, 1, NUM_P_TOKENS]
+            batch_d_out_oha.append(tf.expand_dims(batch_d_out_oha_t, 1))  # [None, 1, NUM_D_TOKENS]
+            batch_r_out_oha.append(tf.expand_dims(batch_r_out_oha_t, 1))  # [None, 1, NUM_R_TOKENS]
 
             # No teacher forcing so avoid so-called exposure bias
             batch_p_t = batch_p_out_oha_t
             batch_d_t = batch_d_out_oha_t
             batch_r_t = batch_r_out_oha_t
-  
-        batch_p_out = tf.concat(batch_p_out, axis=1) # [None, song_length]
-        batch_d_out = tf.concat(batch_d_out, axis=1) # [None, song_length]
-        batch_r_out = tf.concat(batch_r_out, axis=1) # [None, song_length]
 
-        batch_p_out_oha = tf.concat(batch_p_out_oha, axis=1) # [None, song_length, NUM_P_TOKENS]
-        batch_d_out_oha = tf.concat(batch_d_out_oha, axis=1) # [None, song_length, NUM_D_TOKENS]
-        batch_r_out_oha = tf.concat(batch_r_out_oha, axis=1) # [None, song_length, NUM_R_TOKENS]
-    
-        return ((batch_p_out, batch_d_out, batch_r_out), 
+        batch_p_out = tf.concat(batch_p_out, axis=1)  # [None, song_length]
+        batch_d_out = tf.concat(batch_d_out, axis=1)  # [None, song_length]
+        batch_r_out = tf.concat(batch_r_out, axis=1)  # [None, song_length]
+
+        batch_p_out_oha = tf.concat(batch_p_out_oha, axis=1)  # [None, song_length, NUM_P_TOKENS]
+        batch_d_out_oha = tf.concat(batch_d_out_oha, axis=1)  # [None, song_length, NUM_D_TOKENS]
+        batch_r_out_oha = tf.concat(batch_r_out_oha, axis=1)  # [None, song_length, NUM_R_TOKENS]
+
+        return ((batch_p_out, batch_d_out, batch_r_out),
                 (batch_p_out_oha, batch_d_out_oha, batch_r_out_oha))
 
     def _d_recurrence(self, batch_m, batch_n, training=False):
@@ -329,8 +333,8 @@ class AdversarialDriver():
             if t >= self.seed_len:
                 d_out.append(tf.expand_dims(d_out_t, 1))
 
-        d_out = tf.concat(d_out, axis=1) # [None, song_length, 1]
-        d_out = tf.reduce_mean(d_out, axis=[1, 2]) # [None]
+        d_out = tf.concat(d_out, axis=1)  # [None, song_length, 1]
+        d_out = tf.reduce_mean(d_out, axis=[1, 2])  # [None]
 
         return d_out
 
@@ -338,19 +342,19 @@ class AdversarialDriver():
         """Relativistic GAN loss 
         """
         g_loss = tf.nn.sigmoid_cross_entropy_with_logits(
-            logits=fake_logits-real_logits, labels=tf.ones_like(fake_logits))
+            logits=fake_logits - real_logits, labels=tf.ones_like(fake_logits))
 
         d_loss = tf.nn.sigmoid_cross_entropy_with_logits(
-            logits=real_logits-fake_logits, labels=tf.ones_like(real_logits))
+            logits=real_logits - fake_logits, labels=tf.ones_like(real_logits))
 
         return tf.reduce_mean(g_loss), tf.reduce_mean(d_loss)
-    
+
     def _compute_loss(self, inp, out, training=False):
         """Relativistic Standard GAN Loss.
         :param inp: syllable meta data & note 
         :param out: output from the generator
         """
-        batch_m, (batch_p, batch_d, batch_r)    = inp
+        batch_m, (batch_p, batch_d, batch_r) = inp
         (batch_p_oha, batch_d_oha, batch_r_oha) = out
 
         # discriminator forward pass with real melodies
@@ -359,7 +363,7 @@ class AdversarialDriver():
 
         # discriminator forward pass with generated melodies
         batch_fake_logits = self._d_recurrence(
-            batch_m, (batch_p_oha, batch_d_oha, batch_r_oha), training=training) 
+            batch_m, (batch_p_oha, batch_d_oha, batch_r_oha), training=training)
 
         # loss computation
         g_loss, d_loss = self._loss_fn(batch_real_logits, batch_fake_logits)
@@ -368,10 +372,10 @@ class AdversarialDriver():
 
     def _step(self, inp, training=False):
         g_out, g_out_oha = self._seed_g_recurrence(inp, training=training)
-        g_loss, d_loss   = self._compute_loss(inp, g_out_oha, training=training)
+        g_loss, d_loss = self._compute_loss(inp, g_out_oha, training=training)
 
         return g_loss, d_loss, g_out
-    
+
     @tf.function
     def train_step(self, inp):
         """Adversarial Step
@@ -390,7 +394,7 @@ class AdversarialDriver():
         self.d_opt.apply_gradients(zip(d_grads, d_vars))
 
         return g_loss, d_loss, g_out
-    
+
     @tf.function
     def generate(self, batch_m):
         """
