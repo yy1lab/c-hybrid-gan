@@ -105,7 +105,8 @@ def tune_pitch(y_attr_p):
     :param y_attr_p : pitch attribute of a musical note.
     """
     y_attr_p = np.expand_dims(y_attr_p, axis=-1)  # [None, SONG_LENGTH, 1]
-    y_attr_p = list(map(midi_statistics.tune_song, y_attr_p))  # [None, SONG_LENGTH, 1]
+    # Removed autotuning
+    # y_attr_p = list(map(midi_statistics.tune_song, y_attr_p))  # [None, SONG_LENGTH, 1]
     return np.squeeze(y_attr_p, axis=-1)  # [None, SONG_LENGTH]
 
 
